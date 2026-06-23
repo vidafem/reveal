@@ -422,64 +422,7 @@
   opacity: 0; /* Invisible al inicio, controlada por scroll */
 }
 
-/* GRID DE COORDENADAS PARA DESARROLLO */
-.dev-grid-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 9999;
-}
 
-.grid-line-h {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  border-top: 1px dashed rgba(220, 100, 100, 0.45);
-  font-family: monospace;
-  font-size: 11px;
-  color: rgba(220, 50, 50, 0.8);
-  padding-left: 5px;
-  line-height: 14px;
-}
-
-.grid-line-v {
-  position: absolute;
-  top: 0;
-  height: 100%;
-  border-left: 1px dashed rgba(100, 100, 220, 0.45);
-  font-family: monospace;
-  font-size: 11px;
-  color: rgba(50, 50, 220, 0.8);
-  padding-top: 5px;
-  writing-mode: vertical-lr;
-  text-indent: 10px;
-}
-
-.grid-toggle-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 10000;
-  background-color: rgba(123, 91, 66, 0.85);
-  color: white;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 20px;
-  font-size: 13px;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  backdrop-filter: blur(5px);
-  transition: all 0.2s ease;
-}
-
-.grid-toggle-btn:hover {
-  background-color: rgba(123, 91, 66, 1);
-  transform: scale(1.05);
-}
 
 /* ==============================================================
    INDICADOR DE SCROLL FIJO FLOTANTE
@@ -915,4 +858,205 @@
   pointer-events: none;
   z-index: 1; /* Detrás del contenido de las secciones */
   overflow: hidden;
+}
+
+/* ==============================================================
+   SECCIÓN DE PREDICCIÓN (JUEGO INTERACTIVO)
+   ============================================================== */
+.prediction-section {
+  width: 100%;
+  max-width: 450px;
+  margin: 3.5rem auto 2rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 0 1.5rem;
+  z-index: 10;
+  position: relative;
+  text-shadow: 1px 1px 3px rgba(123, 91, 66, 0.15), 
+               0 0 5px rgba(255, 255, 255, 0.8);
+}
+
+.prediction-title {
+  font-family: 'Cinzel', 'Georgia', serif;
+  font-size: 2.2rem;
+  color: #7b5b42;
+  margin: 0 0 0.5rem 0;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  line-height: 1.2;
+}
+
+.prediction-subtitle {
+  font-family: 'Cinzel', 'Georgia', serif;
+  font-size: 1.05rem;
+  color: #c5a059;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin: 0 0 2rem 0;
+}
+
+.prediction-bears-container {
+  width: 100%;
+  max-width: 320px;
+  margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  mix-blend-mode: multiply;
+}
+
+.prediction-bears-img {
+  width: 100%;
+  height: auto;
+}
+
+.prediction-buttons {
+  display: flex;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 340px;
+  margin-bottom: 2.5rem;
+  justify-content: center;
+}
+
+.prediction-btn {
+  font-family: 'Cinzel', 'Georgia', serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #7b5b42;
+  background-color: rgba(253, 251, 247, 0.95);
+  border: 1px solid rgba(197, 160, 89, 0.35);
+  padding: 0.8rem 2.2rem;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(123, 91, 66, 0.08);
+  transition: all 0.25s ease;
+  flex: 1;
+}
+
+.prediction-btn.btn-boy {
+  border-color: rgba(147, 197, 253, 0.4);
+}
+
+.prediction-btn.btn-boy:hover,
+.prediction-btn.btn-boy.selected {
+  border-color: #60a5fa;
+  color: #1e3a8a;
+  background-color: #eff6ff;
+  box-shadow: 0 0 15px rgba(147, 197, 253, 0.65), 0 4px 10px rgba(147, 197, 253, 0.3);
+}
+
+.prediction-btn.btn-girl {
+  border-color: rgba(251, 207, 232, 0.4);
+}
+
+.prediction-btn.btn-girl:hover,
+.prediction-btn.btn-girl.selected {
+  border-color: #f472b6;
+  color: #9d174d;
+  background-color: #fdf2f8;
+  box-shadow: 0 0 15px rgba(251, 207, 232, 0.65), 0 4px 10px rgba(251, 207, 232, 0.3);
+}
+
+.prediction-results {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.results-title {
+  font-family: 'GreatVibes', cursive;
+  font-size: 3.2rem;
+  color: #7b5b42;
+  margin: 0 0 1.2rem 0;
+  font-weight: normal;
+}
+
+.results-percentages {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 0.6rem;
+  padding: 0 0.5rem;
+  font-family: 'Cinzel', 'Georgia', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.results-pct-boy {
+  color: #2563eb;
+}
+
+.results-pct-girl {
+  color: #db2777;
+}
+
+.results-bar-container {
+  width: 100%;
+  height: 18px;
+  background-color: #f1f5f9;
+  border-radius: 9px;
+  overflow: hidden;
+  display: flex;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(197, 160, 89, 0.25);
+}
+
+.results-bar-boy {
+  height: 100%;
+  background: linear-gradient(90deg, #93c5fd, #60a5fa);
+  border-top-left-radius: 9px;
+  border-bottom-left-radius: 9px;
+}
+
+.results-bar-girl {
+  height: 100%;
+  background: linear-gradient(90deg, #fbcfe8, #f472b6);
+  border-top-right-radius: 9px;
+  border-bottom-right-radius: 9px;
+}
+
+/* Ajustes responsivos para predicciones en móviles */
+@media (max-width: 600px) {
+  .prediction-section {
+    margin-top: 2.5rem;
+  }
+  .prediction-title {
+    font-size: 1.8rem;
+  }
+  .prediction-subtitle {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+  .prediction-bears-container {
+    max-width: 250px;
+    margin-bottom: 1.5rem;
+  }
+  .prediction-buttons {
+    gap: 1rem;
+    max-width: 300px;
+    margin-bottom: 2rem;
+  }
+  .prediction-btn {
+    font-size: 1rem;
+    padding: 0.7rem 1.5rem;
+  }
+  .results-title {
+    font-size: 2.6rem;
+  }
+  .results-percentages {
+    font-size: 0.95rem;
+  }
+  .results-bar-container {
+    height: 14px;
+    border-radius: 7px;
+  }
+  .results-bar-boy, .results-bar-girl {
+    border-radius: 7px;
+  }
 }

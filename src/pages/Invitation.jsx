@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { supabase } from '../supabaseClient';
 import '../styles/Invitation.css';
 
 // Variantes para animación letra por letra de la frase
@@ -134,11 +135,144 @@ function BackgroundSparkle({ sp, scrollYProgress }) {
 
 export default function Invitation({ name }) {
   const [showIntro, setShowIntro] = useState(true);
-  const [showGrid, setShowGrid] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showCalendarModal, setShowCalendarModal] = useState(false);
   const containerRef = useRef(null);
 
+  const [userPrediction, setUserPrediction] = useState(null);
+  const [votes, setVotes] = useState({ boy: 58, girl: 42 });
+
+  // Función para obtener los totales de la base de datos
+  const fetchVotesFromSupabase = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('invitations')
+        .select('prediction');
+      
+      if (error) {
+        console.warn('No se pudieron cargar votos de Supabase, usando locales:', error.message);
+        return;
+      }
+
+      if (data) {
+        const counts = data.reduce((acc, curr) => {
+          if (curr.prediction === 'boy') acc.boy++;
+          if (curr.prediction === 'girl') acc.girl++;
+          return acc;
+        }, { boy: 0, girl: 0 });
+
+        // Sumamos los votos reales de la base de datos a los 58/42 por defecto
+        setVotes({
+          boy: 58 + counts.boy,
+          girl: 42 + counts.girl
+        });
+      }
+    } catch (err) {
+      console.error('Error fetching votes:', err);
+    }
+  };
+
+  // Cargar predicción previa del usuario actual y totales al montar el componente
+  useEffect(() => {
+    const initPrediction = async () => {
+      // 1. Obtener totales
+      await fetchVotesFromSupabase();
+
+      // 2. Comprobar si este invitado ya tiene un voto registrado en Supabase
+      if (name) {
+        try {
+          const { data, error } = await supabase
+            .from('invitations')
+            .select('prediction')
+            .eq('name', name)
+            .maybeSingle();
+
+          if (error) {
+            console.warn('Error fetching individual prediction:', error.message);
+            const localPred = localStorage.getItem('user_prediction');
+            if (localPred) setUserPrediction(localPred);
+            return;
+          }
+
+          if (data && data.prediction) {
+            setUserPrediction(data.prediction);
+            localStorage.setItem('user_prediction', data.prediction);
+          } else {
+            const localPred = localStorage.getItem('user_prediction');
+            if (localPred) {
+              setUserPrediction(localPred);
+              // Sincronizar local a DB si no estaba
+              await supabase
+                .from('invitations')
+                .insert({ name: name, prediction: localPred });
+              await fetchVotesFromSupabase();
+            }
+          }
+        } catch (err) {
+          console.error(err);
+        }
+      }
+    };
+
+    initPrediction();
+  }, [name]);
+
+  const handlePrediction = async (gender) => {
+    let newPrediction = gender;
+
+    if (userPrediction === gender) {
+      // Desmarcar voto
+      newPrediction = null;
+      setUserPrediction(null);
+      localStorage.removeItem('user_prediction');
+
+      try {
+        const { error } = await supabase
+          .from('invitations')
+          .delete()
+          .eq('name', name);
+        if (error) throw error;
+      } catch (err) {
+        console.error('Error deleting prediction:', err);
+      }
+    } else {
+      // Marcar nuevo voto o actualizar el existente
+      setUserPrediction(gender);
+      localStorage.setItem('user_prediction', gender);
+
+      try {
+        const { data: existing, error: selectError } = await supabase
+          .from('invitations')
+          .select('id')
+          .eq('name', name)
+          .maybeSingle();
+
+        if (selectError) throw selectError;
+
+        if (existing) {
+          const { error: updateError } = await supabase
+            .from('invitations')
+            .update({ prediction: gender })
+            .eq('name', name);
+          if (updateError) throw updateError;
+        } else {
+          const { error: insertError } = await supabase
+            .from('invitations')
+            .insert({ name: name, prediction: gender });
+          if (insertError) throw insertError;
+        }
+      } catch (err) {
+        console.error('Error saving prediction:', err);
+      }
+    }
+
+    // Recargar los totales actualizados en tiempo real
+    await fetchVotesFromSupabase();
+  };
+
+  const totalVotes = votes.boy + votes.girl;
+  const boyPercentage = totalVotes > 0 ? Math.round((votes.boy / totalVotes) * 100) : 50;
+  const girlPercentage = totalVotes > 0 ? Math.round((votes.girl / totalVotes) * 100) : 50;
   // Generación procedimental de 45 destellos del fondo con colores amarillos y cafés
   const backgroundSparkles = React.useMemo(() => {
     const list = [];
@@ -363,38 +497,12 @@ export default function Invitation({ name }) {
     }
   }, [showIntro]);
 
-  const renderHorizontalGridLines = () => {
-    const lines = [];
-    for (let i = 0; i <= 250; i += 10) {
-      lines.push(
-        <div key={`h-${i}`} className="grid-line-h" style={{ top: `${i}vh` }}>
-          Y: {i}vh
-        </div>
-      );
-    }
-    return lines;
-  };
 
-  const renderVerticalGridLines = () => {
-    const lines = [];
-    for (let i = 10; i < 100; i += 10) {
-      lines.push(
-        <div key={`v-${i}`} className="grid-line-v" style={{ left: `${i}vw` }}>
-          X: {i}vw
-        </div>
-      );
-    }
-    return lines;
-  };
 
   return (
     <div className="invitation-container" ref={containerRef}>
 
-      {!showIntro && (
-        <button className="grid-toggle-btn" onClick={() => setShowGrid(!showGrid)}>
-          {showGrid ? 'Ocultar Guías' : 'Mostrar Guías (Coordenadas)'}
-        </button>
-      )}
+
 
       <AnimatePresence>
         {showIntro ? (
@@ -435,12 +543,7 @@ export default function Invitation({ name }) {
               ))}
             </div>
 
-            {showGrid && (
-              <div className="dev-grid-container">
-                {renderHorizontalGridLines()}
-                {renderVerticalGridLines()}
-              </div>
-            )}
+
             {/* ==============================================================
                ESTRELLITAS CHICAS (estre.png) - BAJADAS 6vh CADA UNA
                ============================================================== */}
@@ -997,6 +1100,69 @@ export default function Invitation({ name }) {
                 </div>
               </div>
             </motion.div>
+
+            {/* SECCIÓN 5: PREDICCIÓN */}
+            <motion.section
+              className="prediction-section"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: 0.15 }}
+              transition={{ duration: 0.7, ease: "easeOut" }}
+            >
+              <h3 className="prediction-title">¿Cuál es tu predicción?</h3>
+              <p className="prediction-subtitle">Selecciona el botón de tu predicción</p>
+
+              {/* Imagen de los ositos */}
+              <div className="prediction-bears-container">
+                <img
+                  src="/images/ositos.png"
+                  alt="Predicción de género"
+                  className="prediction-bears-img"
+                />
+              </div>
+
+              {/* Botones para votar */}
+              <div className="prediction-buttons">
+                <motion.button
+                  className={`prediction-btn btn-boy ${userPrediction === 'boy' ? 'selected' : ''}`}
+                  whileHover={{ scale: 1.08 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => handlePrediction('boy')}
+                >
+                  Niño
+                </motion.button>
+                <motion.button
+                  className={`prediction-btn btn-girl ${userPrediction === 'girl' ? 'selected' : ''}`}
+                  whileHover={{ scale: 1.08 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => handlePrediction('girl')}
+                >
+                  Niña
+                </motion.button>
+              </div>
+
+              {/* Resultados */}
+              <div className="prediction-results">
+                <h4 className="results-title">Resultados</h4>
+                <div className="results-percentages">
+                  <span className="results-pct results-pct-boy">{boyPercentage}% Niño</span>
+                  <span className="results-pct results-pct-girl">{girlPercentage}% Niña</span>
+                </div>
+                {/* Barra horizontal split */}
+                <div className="results-bar-container">
+                  <motion.div
+                    className="results-bar-boy"
+                    animate={{ width: `${boyPercentage}%` }}
+                    transition={{ type: "spring", damping: 20, stiffness: 100 }}
+                  />
+                  <motion.div
+                    className="results-bar-girl"
+                    animate={{ width: `${girlPercentage}%` }}
+                    transition={{ type: "spring", damping: 20, stiffness: 100 }}
+                  />
+                </div>
+              </div>
+            </motion.section>
 
           </motion.div>
         )}
