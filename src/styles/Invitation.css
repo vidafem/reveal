@@ -190,8 +190,9 @@
   letter-spacing: 2.2px;
   line-height: 1.5;
   margin: 0;
-  text-shadow: 2px 2px 5px rgba(123, 91, 66, 0.25),
-    -1px -1px 0px rgba(255, 255, 255, 0.8); /* Sombreado idéntico al de reveal */
+  text-shadow: 2px 2px 6px rgba(123, 91, 66, 0.45),
+    -1px -1px 0px rgba(255, 255, 255, 0.95),
+    0px 0px 10px rgba(255, 255, 255, 0.7);
 }
 
 /* (Eliminado scroll-indicator previo en favor de indicador flotante fijo) */

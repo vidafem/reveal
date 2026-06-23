@@ -38,7 +38,7 @@ export default function Invitation({ name }) {
 
   const downloadIcs = () => {
     const event = {
-      title: "Gender Reveal",
+      title: "Gender Reveal Maritza Hidalgo",
       description: "¡Acompáñanos a descubrir el género de nuestro bebé!",
       location: "Chongon - Paseo del Sol 4 Mz 7801 SL 22, Urbanización Paseo del Sol",
       start: "20260815T150000",
