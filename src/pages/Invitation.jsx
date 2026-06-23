@@ -184,15 +184,15 @@ export default function Invitation({ name }) {
   const detailsCloudOpacity = useTransform(scrollYProgress, [0.01, 0.11, 0.22], [0, 1, 0]);
   const detailsCloudX = useTransform(scrollYProgress, [0.01, 0.11, 0.22], ['-300px', '0px', '300px']);
 
-  // 6. Sección Código de Vestimenta y Tarjeta Regalo (Animación de entrada progresiva y salida por scroll):
-  const dresscodeOpacity = useTransform(scrollYProgress, [0.20, 0.27, 0.36, 0.44], [0, 1, 1, 0]);
-  const dresscodeY = useTransform(scrollYProgress, [0.20, 0.27, 0.36, 0.44], ['60px', '0px', '0px', '-60px']);
-  const dresscodeLunaX = useTransform(scrollYProgress, [0.20, 0.27, 0.36, 0.44], ['-120px', '0px', '0px', '-120px']);
-  const dresscodeTitleX = useTransform(scrollYProgress, [0.20, 0.27, 0.36, 0.44], ['120px', '0px', '0px', '120px']);
-  const dresscodeTextScale = useTransform(scrollYProgress, [0.20, 0.27, 0.36, 0.44], [1.35, 1.0, 1.0, 0.85]);
+  // 6. Sección Código de Vestimenta y Tarjeta Regalo (Animación de entrada progresiva al bajar scroll y salida al subir):
+  const dresscodeOpacity = useTransform(scrollYProgress, [0.18, 0.28, 1.0], [0, 1, 1]);
+  const dresscodeY = useTransform(scrollYProgress, [0.18, 0.28, 1.0], ['60px', '0px', '0px']);
+  const dresscodeLunaX = useTransform(scrollYProgress, [0.18, 0.28, 1.0], ['120px', '0px', '0px']); // Entra desde la derecha
+  const dresscodeTitleX = useTransform(scrollYProgress, [0.18, 0.28, 1.0], ['-120px', '0px', '0px']); // Entra desde la izquierda
+  const dresscodeTextScale = useTransform(scrollYProgress, [0.18, 0.28, 1.0], [1.35, 1.0, 1.0]);
 
-  const giftCardOpacity = useTransform(scrollYProgress, [0.28, 0.37, 0.48, 0.58], [0, 1, 1, 0]);
-  const giftCardY = useTransform(scrollYProgress, [0.28, 0.37, 0.48, 0.58], ['80px', '0px', '0px', '-80px']);
+  const giftCardOpacity = useTransform(scrollYProgress, [0.26, 0.36, 1.0], [0, 1, 1]);
+  const giftCardY = useTransform(scrollYProgress, [0.26, 0.36, 1.0], ['80px', '0px', '0px']);
 
   // Detector de Scroll
   useEffect(() => {
@@ -739,6 +739,13 @@ export default function Invitation({ name }) {
               }}
             >
               <div className="dresscode-header">
+                <motion.h3
+                  className="dresscode-title"
+                  style={{ x: dresscodeTitleX }}
+                >
+                  <span className="dresscode-word">Código de</span>
+                  <span className="dresscode-word">Vestimenta</span>
+                </motion.h3>
                 <motion.img
                   src="/images/luna.png"
                   alt="Luna"
@@ -754,13 +761,6 @@ export default function Invitation({ name }) {
                     ease: "easeInOut"
                   }}
                 />
-                <motion.h3
-                  className="dresscode-title"
-                  style={{ x: dresscodeTitleX }}
-                >
-                  <span className="dresscode-word">Código de</span>
-                  <span className="dresscode-word">Vestimenta</span>
-                </motion.h3>
               </div>
               <motion.p
                 className="dresscode-text"
