@@ -98,12 +98,74 @@ const sparkles = [
   { bottom: '50%', right: '22%', color: '#ffffff', delay: 0.6, duration: 2.9, size: '12px' }
 ];
 
+// Componente individual para cada destello de fondo con animación Parallax
+function BackgroundSparkle({ sp, scrollYProgress }) {
+  // Transforma el scroll de 0 a 1 a una traslación vertical entre 0 y sp.scrollOffset
+  const yVal = useTransform(scrollYProgress, [0, 1], [0, sp.scrollOffset]);
+
+  return (
+    <motion.span
+      style={{
+        position: 'absolute',
+        top: sp.top,
+        left: sp.left,
+        color: sp.color,
+        fontSize: sp.size,
+        pointerEvents: 'none',
+        lineHeight: 1,
+        y: yVal,
+        zIndex: 1,
+      }}
+      animate={{
+        opacity: [0.08, 0.75, 0.08],
+        scale: [0.7, 1.25, 0.7]
+      }}
+      transition={{
+        repeat: Infinity,
+        duration: sp.duration,
+        delay: sp.delay,
+        ease: "easeInOut"
+      }}
+    >
+      ✦
+    </motion.span>
+  );
+}
+
 export default function Invitation({ name }) {
   const [showIntro, setShowIntro] = useState(true);
   const [showGrid, setShowGrid] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showCalendarModal, setShowCalendarModal] = useState(false);
   const containerRef = useRef(null);
+
+  // Generación procedimental de 45 destellos del fondo con colores amarillos y cafés
+  const backgroundSparkles = React.useMemo(() => {
+    const list = [];
+    const colors = [
+      '#c5a059', // Dorado / Amarillo oscuro
+      '#7b5b42', // Café oscuro
+      '#d4a373', // Café claro / Arena
+      '#8c6e58', // Café medio
+      '#b28e47', // Oro viejo
+      '#ebd5a3', // Amarillo crema / Oro claro
+      '#fdfbf7'  // Blanco crema
+    ];
+    // Distribuimos los destellos uniformemente de 2% a 98% a lo largo de la página
+    for (let i = 0; i < 45; i++) {
+      const topVal = 2 + (i * 96 / 45) + (Math.random() * 1.5 - 0.75);
+      const top = `${Math.min(99, Math.max(1, topVal))}%`;
+      const left = `${4 + Math.random() * 92}%`;
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const size = `${8 + Math.floor(Math.random() * 9)}px`; // 8px a 16px
+      const duration = 1.8 + Math.random() * 1.8; // 1.8s a 3.6s
+      const delay = Math.random() * 2.5; // 0s a 2.5s
+      // Desplazamiento vertical máximo por scroll (-160px a +160px)
+      const scrollOffset = -160 + Math.random() * 320;
+      list.push({ top, left, color, size, duration, delay, scrollOffset });
+    }
+    return list;
+  }, []);
 
   const downloadIcs = () => {
     const event = {
@@ -366,13 +428,19 @@ export default function Invitation({ name }) {
             transition={{ duration: 1.2 }}
             className="invitation-content"
           >
+            {/* Contenedor de estrellas y destellos en el fondo de toda la página */}
+            <div className="page-bg-sparkles-container">
+              {backgroundSparkles.map((sp, idx) => (
+                <BackgroundSparkle key={idx} sp={sp} scrollYProgress={scrollYProgress} />
+              ))}
+            </div>
+
             {showGrid && (
               <div className="dev-grid-container">
                 {renderHorizontalGridLines()}
                 {renderVerticalGridLines()}
               </div>
             )}
-
             {/* ==============================================================
                ESTRELLITAS CHICAS (estre.png) - BAJADAS 6vh CADA UNA
                ============================================================== */}
@@ -916,14 +984,15 @@ export default function Invitation({ name }) {
                 <div className="gift-columns">
                   <div className="gift-column">
                     <span className="gift-team-title">Team niño</span>
-                    <span className="gift-team-desc">Trae Pampers</span>
+                    <span className="gift-team-desc">Trae Pañales de preferencia: marca marca</span>
                   </div>
 
                   <div className="gift-divider-star">✦</div>
 
                   <div className="gift-column">
                     <span className="gift-team-title">Team niña</span>
-                    <span className="gift-team-desc">Trae toallitas húmedas</span>
+                    <span className="gift-team-desc">Trae toallitas húmedas de preferencia: marca marca</span>
+
                   </div>
                 </div>
               </div>
