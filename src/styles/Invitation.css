@@ -105,9 +105,9 @@
   z-index: 2;
 }
 
-/* Sección 1: Portada (Gender Reveal) */
+/* Portada (Gender Reveal) */
 .hero-section {
-  height: 100vh;
+  height: 100vh; /* Restablecido a 100vh para que el contenido de abajo comience completamente oculto */
   width: 100%;
   position: relative;
   z-index: 2;
@@ -135,23 +135,50 @@
   color: #c5a059;
 }
 
-/* Osito de la mano (osomano.png) */
-.invitation-bear-osomano {
+/* Contenedores de posicionamiento absoluto robusto para evitar saltos y superposiciones al inicio */
+.gender-reveal-title-container {
   position: absolute;
-  width: 180px;
-  height: auto;
+  top: 24vh;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  text-align: center;
+}
+
+.invitation-bear-container {
+  position: absolute;
+  top: 50vh;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 3;
   pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.invitation-bear-osomano {
+  width: 180px;
+  height: auto;
   mix-blend-mode: multiply;
 }
 
-/* Frase nueva (Pronto habrá una nueva sonrisa...) */
-.invitation-phrase {
+.invitation-phrase-container {
   position: absolute;
+  top: 76vh;
+  left: 50%;
+  transform: translateX(-50%);
   width: 90%;
   max-width: 450px;
   text-align: center;
   z-index: 2;
+  pointer-events: none;
+}
+
+/* Frase nueva (Pronto habrá una nueva sonrisa...) */
+.invitation-phrase {
+  width: 100%;
+  opacity: 0; /* Invisible al inicio, controlada por scroll */
 }
 
 .invitation-phrase h2 {
@@ -163,60 +190,214 @@
   letter-spacing: 2.2px;
   line-height: 1.5;
   margin: 0;
-  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+  text-shadow: 2px 2px 5px rgba(123, 91, 66, 0.25),
+    -1px -1px 0px rgba(255, 255, 255, 0.8); /* Sombreado idéntico al de reveal */
 }
 
-/* Indicador de scroll animado */
-.scroll-indicator {
-  position: absolute;
-  bottom: 5vh;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1rem;
-  color: #8c6e58;
-  font-weight: 600;
-  z-index: 10;
-}
-
-.scroll-arrow {
-  font-size: 1.8rem;
-}
+/* (Eliminado scroll-indicator previo en favor de indicador flotante fijo) */
 
 /* Sección 2: Próximos detalles */
 .details-section {
-  min-height: 100vh;
+  min-height: 80vh; /* Reducido para evitar exceso de scroll vacío */
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  background-color: rgba(255, 255, 255, 0.25);
+  justify-content: flex-start; /* Alineado arriba para comenzar en 100vh y terminar en 80vh */
+  background-color: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(4px);
-  border-top: 1px solid rgba(255, 255, 255, 0.3);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 3rem 2rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1vh 1.5rem 4rem 1.5rem; /* Reducido a 1vh para que inicie exactamente en Y: 100vh y no se asome, terminando en Y: 80vh */
   text-align: center;
   position: relative;
   z-index: 10;
 }
 
-.details-title {
-  font-family: 'GreatVibes', cursive;
-  font-size: 3.5rem;
-  font-weight: normal;
-  margin-bottom: 2rem;
-  color: #7b5b42;
+/* Contenedor relativo para el título y la nube de fondo */
+.details-title-container {
+  position: relative;
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto 2.5rem auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 120px; /* Espacio para que flote la nube sin molestar */
 }
 
-.details-text {
-  max-width: 400px;
-  font-size: 1.15rem;
-  line-height: 1.8;
+.details-title-cloud-bg {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centrado perfecto respecto al contenedor */
+  width: 340px; /* Tamaño idóneo de la nube */
+  height: auto;
+  z-index: 1; /* Detrás del título */
+  pointer-events: none;
+  mix-blend-mode: multiply; /* Fusión perfecta de textura */
+}
+
+.details-title-new {
+  font-family: 'GreatVibes', cursive;
+  font-size: 3.6rem;
+  color: #7b5b42;
+  margin: 0; /* Removemos margen ya que el contenedor maneja el layout */
+  font-weight: normal;
+  line-height: 1.2;
+  text-shadow: 2px 2px 5px rgba(123, 91, 66, 0.25),
+    -1px -1px 0px rgba(255, 255, 255, 0.8);
+  position: relative;
+  z-index: 2; /* Texto sobre la nube */
+}
+
+/* Contenedor de la fecha (Estilo premium alineado) */
+.event-date-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.8rem;
+  margin-bottom: 3.5rem;
+  font-family: 'Cinzel', 'Georgia', serif;
   color: #8c6e58;
+}
+
+.event-date-day, .event-date-month {
+  font-size: 2.2rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.event-date-number {
+  font-size: 4rem;
+  font-weight: 600;
+  color: #c5a059;
+  line-height: 1;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.event-date-divider {
+  font-size: 2.5rem;
+  color: rgba(140, 110, 88, 0.35);
+  font-weight: 300;
+}
+
+/* Contenedor de Información y Osito superpuestos de forma elegante (Sin Recuadro) */
+.event-details-row {
+  position: relative;
+  width: 90%;
+  max-width: 380px; /* Tamaño de tarjeta super compacto e ideal para móvil */
+  margin: 0 auto;
+  padding: 1.5rem 1rem; /* Padding reducido al no tener recuadro visible */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: visible; /* Deja que el osito sobresalga ligeramente */
+}
+
+.event-details-info {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+  text-align: center; /* Texto centrado perfectamente */
+  width: 100%;
+  position: relative;
+  z-index: 2; /* Texto por encima del oso */
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.info-label {
+  font-family: 'Cinzel', 'Georgia', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #c5a059;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.info-value {
+  font-family: 'Cinzel', 'Georgia', serif;
+  font-size: 1.25rem;
+  color: #7b5b42;
+  font-weight: 600;
+  line-height: 1.4;
+  text-shadow: 0px 0px 4px rgba(255, 255, 255, 0.9); /* Sombreado blanco detrás para legibilidad absoluta */
+}
+
+/* Columna del osito absoluto */
+.event-details-bear {
+  position: absolute;
+  left: -20px; /* Asomándose a la izquierda */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 130px; /* Tamaño no intrusivo */
+  height: auto;
+  z-index: 1; /* Detrás del texto */
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bear-seated-img {
+  width: 100%;
+  height: auto;
+}
+
+/* Responsivo para móviles */
+@media (max-width: 600px) {
+  .details-title-container {
+    min-height: 90px;
+    margin-bottom: 2rem;
+  }
+  
+  .details-title-cloud-bg {
+    width: 290px;
+  }
+  
+  .details-title-new {
+    font-size: 2.5rem;
+    margin: 0;
+    padding: 0 10px;
+  }
+  
+  .event-date-container {
+    gap: 0.8rem;
+    margin-bottom: 2.5rem;
+  }
+  
+  .event-date-day, .event-date-month {
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+  }
+  
+  .event-date-number {
+    font-size: 2.6rem;
+  }
+  
+  .event-date-divider {
+    font-size: 1.6rem;
+  }
+  
+  .event-details-row {
+    padding: 1rem 0.5rem; /* Padding móvil mínimo */
+    margin: 0 auto;
+    width: 90%;
+    max-width: 320px; /* Un poco más angosto para celulares muy pequeños */
+  }
+  
+  .event-details-bear {
+    width: 110px; /* Ajuste para móvil */
+    left: -15px;
+  }
 }
 
 /* ELEMENTOS DECORATIVOS */
@@ -236,6 +417,7 @@
   z-index: 8;
   pointer-events: none;
   mix-blend-mode: multiply;
+  opacity: 0; /* Invisible al inicio, controlada por scroll */
 }
 
 /* GRID DE COORDENADAS PARA DESARROLLO */
@@ -295,4 +477,38 @@
 .grid-toggle-btn:hover {
   background-color: rgba(123, 91, 66, 1);
   transform: scale(1.05);
+}
+
+/* ==============================================================
+   INDICADOR DE SCROLL FIJO FLOTANTE
+   ============================================================== */
+.fixed-scroll-indicator {
+  position: fixed;
+  bottom: 25px;
+  right: 25px; /* En la parte inferior derecha */
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background-color: rgba(253, 251, 247, 0.85);
+  border: 1px solid rgba(197, 160, 89, 0.45);
+  box-shadow: 0 4px 16px rgba(123, 91, 66, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  pointer-events: none;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.fixed-scroll-arrow-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fixed-scroll-arrow {
+  color: #c5a059;
+  font-size: 1.3rem;
+  font-weight: bold;
 }
