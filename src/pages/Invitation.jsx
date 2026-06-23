@@ -83,6 +83,21 @@ const giftCardVariants = {
   }
 };
 
+const sparkles = [
+  { top: '12%', left: '8%', color: '#c5a059', delay: 0.1, duration: 2.1, size: '10px' },
+  { top: '22%', right: '10%', color: '#93c5fd', delay: 0.5, duration: 2.8, size: '12px' },
+  { top: '35%', left: '15%', color: '#fbcfe8', delay: 0.8, duration: 2.4, size: '8px' },
+  { top: '18%', right: '25%', color: '#ffffff', delay: 0.3, duration: 3.2, size: '10px' },
+  { bottom: '28%', left: '12%', color: '#93c5fd', delay: 1.2, duration: 2.5, size: '11px' },
+  { bottom: '15%', right: '15%', color: '#c5a059', delay: 0.7, duration: 1.9, size: '13px' },
+  { bottom: '22%', left: '25%', color: '#ffffff', delay: 0.2, duration: 2.7, size: '9px' },
+  { bottom: '35%', right: '8%', color: '#fbcfe8', delay: 0.9, duration: 2.3, size: '12px' },
+  { top: '52%', left: '7%', color: '#fbcfe8', delay: 1.4, duration: 2.0, size: '10px' },
+  { top: '65%', right: '6%', color: '#93c5fd', delay: 0.4, duration: 2.6, size: '11px' },
+  { bottom: '48%', left: '20%', color: '#c5a059', delay: 1.0, duration: 2.2, size: '8px' },
+  { bottom: '50%', right: '22%', color: '#ffffff', delay: 0.6, duration: 2.9, size: '12px' }
+];
+
 export default function Invitation({ name }) {
   const [showIntro, setShowIntro] = useState(true);
   const [showGrid, setShowGrid] = useState(true);
@@ -816,7 +831,7 @@ export default function Invitation({ name }) {
                 className="dresscode-text"
                 variants={dresscodeTextVariants}
               >
-                ¡Vístete de blanco para ser parte de este momento especial!
+                ¡Vístete de blanco, beige o del color que sonsideres que sera para ser parte de este momento especial!
               </motion.p>
             </motion.section>
 
@@ -830,33 +845,38 @@ export default function Invitation({ name }) {
             >
               <div className="gift-card">
                 <div className="gift-card-notch"></div>
-                
-                {/* Destellos de fondo en la tarjeta */}
-                <motion.img
-                  src="/images/estre.png"
-                  className="card-background-sparkle sparkle-1"
-                  animate={{ opacity: [0.15, 0.85, 0.15], scale: [0.75, 1.15, 0.75] }}
-                  transition={{ repeat: Infinity, duration: 2.1, ease: "easeInOut" }}
-                />
-                <motion.img
-                  src="/images/estre1.png"
-                  className="card-background-sparkle sparkle-2"
-                  animate={{ opacity: [0.2, 0.9, 0.2], scale: [0.85, 1.25, 0.85] }}
-                  transition={{ repeat: Infinity, duration: 2.8, ease: "easeInOut", delay: 0.5 }}
-                />
-                <motion.img
-                  src="/images/estre.png"
-                  className="card-background-sparkle sparkle-3"
-                  animate={{ opacity: [0.1, 0.8, 0.1], scale: [0.7, 1.1, 0.7] }}
-                  transition={{ repeat: Infinity, duration: 2.4, ease: "easeInOut", delay: 0.2 }}
-                />
-                <motion.img
-                  src="/images/estre1.png"
-                  className="card-background-sparkle sparkle-4"
-                  animate={{ opacity: [0.25, 0.95, 0.25], scale: [0.8, 1.2, 0.8] }}
-                  transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut", delay: 0.8 }}
-                />
-                
+
+                {/* Destellos sutiles de colores brillantes que parpadean de fondo en la tarjeta */}
+                {sparkles.map((sp, idx) => (
+                  <motion.span
+                    key={idx}
+                    style={{
+                      position: 'absolute',
+                      top: sp.top,
+                      left: sp.left,
+                      right: sp.right,
+                      bottom: sp.bottom,
+                      color: sp.color,
+                      fontSize: sp.size,
+                      pointerEvents: 'none',
+                      zIndex: 1,
+                      lineHeight: 1
+                    }}
+                    animate={{
+                      opacity: [0.1, 0.9, 0.1],
+                      scale: [0.75, 1.25, 0.75]
+                    }}
+                    transition={{
+                      repeat: Infinity,
+                      duration: sp.duration,
+                      delay: sp.delay,
+                      ease: "easeInOut"
+                    }}
+                  >
+                    ✦
+                  </motion.span>
+                ))}
+
                 <div className="gift-card-header">
                   <motion.img
                     src="/images/fugaz.jpg"
@@ -898,9 +918,9 @@ export default function Invitation({ name }) {
                     <span className="gift-team-title">Team niño</span>
                     <span className="gift-team-desc">Trae Pampers</span>
                   </div>
-                  
+
                   <div className="gift-divider-star">✦</div>
-                  
+
                   <div className="gift-column">
                     <span className="gift-team-title">Team niña</span>
                     <span className="gift-team-desc">Trae toallitas húmedas</span>
