@@ -720,6 +720,71 @@ export default function Invitation({ name }) {
 
             </section>
 
+            {/* SECCIÓN 3: CÓDIGO DE VESTIMENTA */}
+            <motion.section
+              className="dresscode-section"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+            >
+              <div className="dresscode-header">
+                <img
+                  src="/images/luna.png"
+                  alt="Luna"
+                  className="dresscode-icon"
+                />
+                <h3 className="dresscode-title">Código de Vestimenta</h3>
+              </div>
+              <p className="dresscode-text">
+                ¡Vístete de blanco para ser parte de este momento especial!
+              </p>
+            </motion.section>
+
+            {/* SECCIÓN 4: TARJETA REGALO */}
+            <motion.div
+              className="gift-card-container"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+            >
+              <div className="gift-card">
+                <div className="gift-card-notch"></div>
+                
+                <div className="gift-card-header">
+                  <img
+                    src="/images/fugaz.jpg"
+                    className="gift-card-icon-left"
+                    alt="Estrella fugaz"
+                  />
+                  <h3 className="gift-card-title">Regalo</h3>
+                  <img
+                    src="/images/destello.jpg"
+                    className="gift-card-icon-right"
+                    alt="Destello"
+                  />
+                </div>
+
+                <h4 className="gift-card-subtitle">¿Te animas a adivinar?</h4>
+                <p className="gift-card-subtext">Si crees que es</p>
+
+                <div className="gift-columns">
+                  <div className="gift-column">
+                    <span className="gift-team-title">Team niño</span>
+                    <span className="gift-team-desc">Trae Pampers</span>
+                  </div>
+                  
+                  <div className="gift-divider-star">✦</div>
+                  
+                  <div className="gift-column">
+                    <span className="gift-team-title">Team niña</span>
+                    <span className="gift-team-desc">Trae toallitas húmedas</span>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
           </motion.div>
         )}
       </AnimatePresence>
