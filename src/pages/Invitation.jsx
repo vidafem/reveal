@@ -184,12 +184,15 @@ export default function Invitation({ name }) {
   const detailsCloudOpacity = useTransform(scrollYProgress, [0.01, 0.11, 0.22], [0, 1, 0]);
   const detailsCloudX = useTransform(scrollYProgress, [0.01, 0.11, 0.22], ['-300px', '0px', '300px']);
 
-  // 6. Sección Código de Vestimenta y Tarjeta Regalo (Animación de entrada progresiva por scroll):
-  const dresscodeOpacity = useTransform(scrollYProgress, [0.22, 0.32], [0, 1]);
-  const dresscodeY = useTransform(scrollYProgress, [0.22, 0.32], ['80px', '0px']);
+  // 6. Sección Código de Vestimenta y Tarjeta Regalo (Animación de entrada progresiva y salida por scroll):
+  const dresscodeOpacity = useTransform(scrollYProgress, [0.20, 0.27, 0.36, 0.44], [0, 1, 1, 0]);
+  const dresscodeY = useTransform(scrollYProgress, [0.20, 0.27, 0.36, 0.44], ['60px', '0px', '0px', '-60px']);
+  const dresscodeLunaX = useTransform(scrollYProgress, [0.20, 0.27, 0.36, 0.44], ['-120px', '0px', '0px', '-120px']);
+  const dresscodeTitleX = useTransform(scrollYProgress, [0.20, 0.27, 0.36, 0.44], ['120px', '0px', '0px', '120px']);
+  const dresscodeTextScale = useTransform(scrollYProgress, [0.20, 0.27, 0.36, 0.44], [1.35, 1.0, 1.0, 0.85]);
 
-  const giftCardOpacity = useTransform(scrollYProgress, [0.28, 0.40], [0, 1]);
-  const giftCardY = useTransform(scrollYProgress, [0.28, 0.40], ['80px', '0px']);
+  const giftCardOpacity = useTransform(scrollYProgress, [0.28, 0.37, 0.48, 0.58], [0, 1, 1, 0]);
+  const giftCardY = useTransform(scrollYProgress, [0.28, 0.37, 0.48, 0.58], ['80px', '0px', '0px', '-80px']);
 
   // Detector de Scroll
   useEffect(() => {
@@ -740,6 +743,7 @@ export default function Invitation({ name }) {
                   src="/images/luna.png"
                   alt="Luna"
                   className="dresscode-icon"
+                  style={{ x: dresscodeLunaX }}
                   animate={{
                     y: [0, -8, 0],
                     rotate: [-4, 4, -4]
@@ -750,11 +754,20 @@ export default function Invitation({ name }) {
                     ease: "easeInOut"
                   }}
                 />
-                <h3 className="dresscode-title">Código de Vestimenta</h3>
+                <motion.h3
+                  className="dresscode-title"
+                  style={{ x: dresscodeTitleX }}
+                >
+                  <span className="dresscode-word">Código de</span>
+                  <span className="dresscode-word">Vestimenta</span>
+                </motion.h3>
               </div>
-              <p className="dresscode-text">
+              <motion.p
+                className="dresscode-text"
+                style={{ scale: dresscodeTextScale }}
+              >
                 ¡Vístete de blanco para ser parte de este momento especial!
-              </p>
+              </motion.p>
             </motion.section>
 
             {/* SECCIÓN 4: TARJETA REGALO */}
