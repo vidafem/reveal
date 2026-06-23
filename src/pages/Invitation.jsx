@@ -184,6 +184,13 @@ export default function Invitation({ name }) {
   const detailsCloudOpacity = useTransform(scrollYProgress, [0.01, 0.11, 0.22], [0, 1, 0]);
   const detailsCloudX = useTransform(scrollYProgress, [0.01, 0.11, 0.22], ['-300px', '0px', '300px']);
 
+  // 6. Sección Código de Vestimenta y Tarjeta Regalo (Animación de entrada progresiva por scroll):
+  const dresscodeOpacity = useTransform(scrollYProgress, [0.22, 0.32], [0, 1]);
+  const dresscodeY = useTransform(scrollYProgress, [0.22, 0.32], ['80px', '0px']);
+
+  const giftCardOpacity = useTransform(scrollYProgress, [0.28, 0.40], [0, 1]);
+  const giftCardY = useTransform(scrollYProgress, [0.28, 0.40], ['80px', '0px']);
+
   // Detector de Scroll
   useEffect(() => {
     const handleScroll = () => {
@@ -723,16 +730,25 @@ export default function Invitation({ name }) {
             {/* SECCIÓN 3: CÓDIGO DE VESTIMENTA */}
             <motion.section
               className="dresscode-section"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
+              style={{
+                opacity: dresscodeOpacity,
+                y: dresscodeY
+              }}
             >
               <div className="dresscode-header">
-                <img
+                <motion.img
                   src="/images/luna.png"
                   alt="Luna"
                   className="dresscode-icon"
+                  animate={{
+                    y: [0, -8, 0],
+                    rotate: [-4, 4, -4]
+                  }}
+                  transition={{
+                    duration: 4.8,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
                 />
                 <h3 className="dresscode-title">Código de Vestimenta</h3>
               </div>
@@ -744,25 +760,70 @@ export default function Invitation({ name }) {
             {/* SECCIÓN 4: TARJETA REGALO */}
             <motion.div
               className="gift-card-container"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.8, ease: "easeOut", delay: 0.1 }}
+              style={{
+                opacity: giftCardOpacity,
+                y: giftCardY
+              }}
             >
               <div className="gift-card">
                 <div className="gift-card-notch"></div>
                 
+                {/* Destellos de fondo en la tarjeta */}
+                <motion.img
+                  src="/images/estre.png"
+                  className="card-background-sparkle sparkle-1"
+                  animate={{ opacity: [0.15, 0.85, 0.15], scale: [0.75, 1.15, 0.75] }}
+                  transition={{ repeat: Infinity, duration: 2.1, ease: "easeInOut" }}
+                />
+                <motion.img
+                  src="/images/estre1.png"
+                  className="card-background-sparkle sparkle-2"
+                  animate={{ opacity: [0.2, 0.9, 0.2], scale: [0.85, 1.25, 0.85] }}
+                  transition={{ repeat: Infinity, duration: 2.8, ease: "easeInOut", delay: 0.5 }}
+                />
+                <motion.img
+                  src="/images/estre.png"
+                  className="card-background-sparkle sparkle-3"
+                  animate={{ opacity: [0.1, 0.8, 0.1], scale: [0.7, 1.1, 0.7] }}
+                  transition={{ repeat: Infinity, duration: 2.4, ease: "easeInOut", delay: 0.2 }}
+                />
+                <motion.img
+                  src="/images/estre1.png"
+                  className="card-background-sparkle sparkle-4"
+                  animate={{ opacity: [0.25, 0.95, 0.25], scale: [0.8, 1.2, 0.8] }}
+                  transition={{ repeat: Infinity, duration: 3.2, ease: "easeInOut", delay: 0.8 }}
+                />
+                
                 <div className="gift-card-header">
-                  <img
+                  <motion.img
                     src="/images/fugaz.jpg"
                     className="gift-card-icon-left"
                     alt="Estrella fugaz"
+                    animate={{
+                      opacity: [0.35, 1, 0.35],
+                      scale: [0.93, 1.07, 0.93]
+                    }}
+                    transition={{
+                      duration: 2.2,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
                   />
                   <h3 className="gift-card-title">Regalo</h3>
-                  <img
+                  <motion.img
                     src="/images/destello.jpg"
                     className="gift-card-icon-right"
                     alt="Destello"
+                    animate={{
+                      opacity: [0.3, 1, 0.3],
+                      scale: [0.95, 1.05, 0.95]
+                    }}
+                    transition={{
+                      duration: 1.8,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: 0.4
+                    }}
                   />
                 </div>
 
