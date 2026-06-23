@@ -530,13 +530,13 @@
   font-weight: 700;
   letter-spacing: 1.5px;
   text-transform: uppercase;
-  color: #7b5b42;
-  background-color: rgba(253, 251, 247, 0.8);
-  border: 1px solid rgba(197, 160, 89, 0.5);
+  color: #fdfbf7;
+  background-color: #7b5b42;
+  border: 1px solid #c5a059;
   padding: 0.75rem 1.2rem;
   border-radius: 25px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(123, 91, 66, 0.08);
+  box-shadow: 0 5px 15px rgba(123, 91, 66, 0.25);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
@@ -547,10 +547,10 @@
 
 .details-action-btn:hover {
   background-color: #c5a059;
-  color: white;
-  border-color: #c5a059;
+  color: #fdfbf7;
+  border-color: #7b5b42;
   transform: translateY(-2px);
-  box-shadow: 0 6px 15px rgba(197, 160, 89, 0.25);
+  box-shadow: 0 8px 22px rgba(123, 91, 66, 0.38);
 }
 
 .details-action-btn:active {
