@@ -181,7 +181,7 @@ export default function Invitation({ name }) {
   // - [0.01, 0.11, 0.22]: Rango de scroll (Inicio, Centro y Fin de la animación).
   // - ['-300px', '0px', '300px']: Posición X. Viene de la izquierda (-300px), llega al centro (0px) y sale por la derecha (300px).
   // - [0, 1, 0]: Opacidad. Empieza invisible (0), se hace 100% visible en el centro (1), y se desvanece al salir a la derecha (0).
-  const detailsCloudOpacity = useTransform(scrollYProgress, [0.01, 0.90, 0.22], [0, 1, 0]);
+  const detailsCloudOpacity = useTransform(scrollYProgress, [0.01, 0.11, 0.22], [0, 1, 0]);
   const detailsCloudX = useTransform(scrollYProgress, [0.01, 0.11, 0.22], ['-300px', '0px', '300px']);
 
   // Detector de Scroll
