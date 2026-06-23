@@ -29,6 +29,60 @@ const letterVariants = {
   }
 };
 
+// Variantes para Código de Vestimenta y Regalo
+const dresscodeContainerVariants = {
+  hidden: { opacity: 0, y: 40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut",
+      staggerChildren: 0.12
+    }
+  }
+};
+
+const dresscodeLunaVariants = {
+  hidden: { x: 100, opacity: 0 },
+  visible: {
+    x: 0,
+    opacity: 1,
+    transition: { type: "spring", damping: 15, stiffness: 100 }
+  }
+};
+
+const dresscodeTitleVariants = {
+  hidden: { x: -100, opacity: 0 },
+  visible: {
+    x: 0,
+    opacity: 1,
+    transition: { type: "spring", damping: 15, stiffness: 100 }
+  }
+};
+
+const dresscodeTextVariants = {
+  hidden: { scale: 1.3, opacity: 0 },
+  visible: {
+    scale: 1.0,
+    opacity: 1,
+    transition: { duration: 0.6, ease: "easeOut" }
+  }
+};
+
+const giftCardVariants = {
+  hidden: { opacity: 0, y: 60, scale: 0.96 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: {
+      duration: 0.7,
+      ease: "easeOut"
+    }
+  }
+};
+
 export default function Invitation({ name }) {
   const [showIntro, setShowIntro] = useState(true);
   const [showGrid, setShowGrid] = useState(true);
@@ -184,15 +238,7 @@ export default function Invitation({ name }) {
   const detailsCloudOpacity = useTransform(scrollYProgress, [0.01, 0.11, 0.22], [0, 1, 0]);
   const detailsCloudX = useTransform(scrollYProgress, [0.01, 0.11, 0.22], ['-300px', '0px', '300px']);
 
-  // 6. Sección Código de Vestimenta y Tarjeta Regalo (Animación de entrada progresiva al bajar scroll y salida al subir):
-  const dresscodeOpacity = useTransform(scrollYProgress, [0.18, 0.28, 1.0], [0, 1, 1]);
-  const dresscodeY = useTransform(scrollYProgress, [0.18, 0.28, 1.0], ['60px', '0px', '0px']);
-  const dresscodeLunaX = useTransform(scrollYProgress, [0.18, 0.28, 1.0], ['120px', '0px', '0px']); // Entra desde la derecha
-  const dresscodeTitleX = useTransform(scrollYProgress, [0.18, 0.28, 1.0], ['-120px', '0px', '0px']); // Entra desde la izquierda
-  const dresscodeTextScale = useTransform(scrollYProgress, [0.18, 0.28, 1.0], [1.35, 1.0, 1.0]);
 
-  const giftCardOpacity = useTransform(scrollYProgress, [0.26, 0.36, 1.0], [0, 1, 1]);
-  const giftCardY = useTransform(scrollYProgress, [0.26, 0.36, 1.0], ['80px', '0px', '0px']);
 
   // Detector de Scroll
   useEffect(() => {
@@ -733,38 +779,42 @@ export default function Invitation({ name }) {
             {/* SECCIÓN 3: CÓDIGO DE VESTIMENTA */}
             <motion.section
               className="dresscode-section"
-              style={{
-                opacity: dresscodeOpacity,
-                y: dresscodeY
-              }}
+              variants={dresscodeContainerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: false, amount: 0.15 }}
             >
               <div className="dresscode-header">
                 <motion.h3
                   className="dresscode-title"
-                  style={{ x: dresscodeTitleX }}
+                  variants={dresscodeTitleVariants}
                 >
                   <span className="dresscode-word">Código de</span>
                   <span className="dresscode-word">Vestimenta</span>
                 </motion.h3>
-                <motion.img
-                  src="/images/luna.png"
-                  alt="Luna"
-                  className="dresscode-icon"
-                  style={{ x: dresscodeLunaX }}
-                  animate={{
-                    y: [0, -8, 0],
-                    rotate: [-4, 4, -4]
-                  }}
-                  transition={{
-                    duration: 4.8,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                />
+                <motion.div
+                  variants={dresscodeLunaVariants}
+                  className="dresscode-icon-wrapper"
+                >
+                  <motion.img
+                    src="/images/luna.png"
+                    alt="Luna"
+                    className="dresscode-icon"
+                    animate={{
+                      y: [0, -8, 0],
+                      rotate: [-4, 4, -4]
+                    }}
+                    transition={{
+                      duration: 4.8,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
+                  />
+                </motion.div>
               </div>
               <motion.p
                 className="dresscode-text"
-                style={{ scale: dresscodeTextScale }}
+                variants={dresscodeTextVariants}
               >
                 ¡Vístete de blanco para ser parte de este momento especial!
               </motion.p>
@@ -773,10 +823,10 @@ export default function Invitation({ name }) {
             {/* SECCIÓN 4: TARJETA REGALO */}
             <motion.div
               className="gift-card-container"
-              style={{
-                opacity: giftCardOpacity,
-                y: giftCardY
-              }}
+              variants={giftCardVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: false, amount: 0.15 }}
             >
               <div className="gift-card">
                 <div className="gift-card-notch"></div>
