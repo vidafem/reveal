@@ -140,7 +140,7 @@ export default function Invitation({ name }) {
   const containerRef = useRef(null);
 
   const [userPrediction, setUserPrediction] = useState(null);
-  const [votes, setVotes] = useState({ boy: 58, girl: 42 });
+  const [votes, setVotes] = useState({ boy: 0, girl: 0 });
 
   // Función para obtener los totales de la base de datos
   const fetchVotesFromSupabase = async () => {
@@ -161,10 +161,10 @@ export default function Invitation({ name }) {
           return acc;
         }, { boy: 0, girl: 0 });
 
-        // Sumamos los votos reales de la base de datos a los 58/42 por defecto
+        // Usar solo los votos reales de Supabase
         setVotes({
-          boy: 58 + counts.boy,
-          girl: 42 + counts.girl
+          boy: counts.boy,
+          girl: counts.girl
         });
       }
     } catch (err) {
