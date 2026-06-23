@@ -273,7 +273,7 @@ export default function Invitation({ name }) {
   const totalVotes = votes.boy + votes.girl;
   const boyPercentage = totalVotes > 0 ? Math.round((votes.boy / totalVotes) * 100) : 50;
   const girlPercentage = totalVotes > 0 ? Math.round((votes.girl / totalVotes) * 100) : 50;
-  // Generación procedimental de 45 destellos del fondo con colores amarillos y cafés
+  // Generación procedimental de 70 destellos del fondo con colores amarillos y cafés
   const backgroundSparkles = React.useMemo(() => {
     const list = [];
     const colors = [
@@ -286,12 +286,12 @@ export default function Invitation({ name }) {
       '#fdfbf7'  // Blanco crema
     ];
     // Distribuimos los destellos uniformemente de 2% a 98% a lo largo de la página
-    for (let i = 0; i < 45; i++) {
-      const topVal = 2 + (i * 96 / 45) + (Math.random() * 1.5 - 0.75);
+    for (let i = 0; i < 70; i++) {
+      const topVal = 2 + (i * 96 / 70) + (Math.random() * 1.5 - 0.75);
       const top = `${Math.min(99, Math.max(1, topVal))}%`;
       const left = `${4 + Math.random() * 92}%`;
       const color = colors[Math.floor(Math.random() * colors.length)];
-      const size = `${8 + Math.floor(Math.random() * 9)}px`; // 8px a 16px
+      const size = `${13 + Math.floor(Math.random() * 14)}px`; // 13px a 26px
       const duration = 1.8 + Math.random() * 1.8; // 1.8s a 3.6s
       const delay = Math.random() * 2.5; // 0s a 2.5s
       // Desplazamiento vertical máximo por scroll (-160px a +160px)
