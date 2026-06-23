@@ -512,3 +512,128 @@
   font-size: 1.3rem;
   font-weight: bold;
 }
+
+/* Botones de Acción (Cómo Llegar / Agregar Calendario) */
+.details-actions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: 100%;
+  margin-top: 1.5rem;
+  z-index: 10;
+  position: relative;
+}
+
+.details-action-btn {
+  font-family: 'Cinzel', 'Georgia', serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #7b5b42;
+  background-color: rgba(253, 251, 247, 0.8);
+  border: 1px solid rgba(197, 160, 89, 0.5);
+  padding: 0.75rem 1.2rem;
+  border-radius: 25px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(123, 91, 66, 0.08);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  text-decoration: none;
+}
+
+.details-action-btn:hover {
+  background-color: #c5a059;
+  color: white;
+  border-color: #c5a059;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(197, 160, 89, 0.25);
+}
+
+.details-action-btn:active {
+  transform: translateY(0);
+}
+
+/* Modal de Confirmación para Calendario */
+.calendar-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(123, 91, 66, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 20000;
+  padding: 1.5rem;
+}
+
+.calendar-modal-content {
+  background: rgba(253, 251, 247, 0.95);
+  border: 1px solid rgba(197, 160, 89, 0.45);
+  border-radius: 20px;
+  padding: 2.2rem 1.8rem;
+  width: 100%;
+  max-width: 340px;
+  box-shadow: 0 10px 30px rgba(123, 91, 66, 0.15);
+  text-align: center;
+}
+
+.calendar-modal-title {
+  font-family: 'Cinzel', 'Georgia', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #7b5b42;
+  margin: 0 0 1.8rem 0;
+  line-height: 1.4;
+  letter-spacing: 0.5px;
+}
+
+.calendar-modal-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.calendar-modal-btn {
+  font-family: 'Cinzel', 'Georgia', serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 0.75rem 1.4rem;
+  border-radius: 22px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1;
+  text-transform: uppercase;
+}
+
+.calendar-modal-btn-confirm {
+  background-color: #c5a059;
+  color: white;
+  border: 1px solid #c5a059;
+}
+
+.calendar-modal-btn-confirm:hover {
+  background-color: #b28e47;
+  border-color: #b28e47;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(197, 160, 89, 0.3);
+}
+
+.calendar-modal-btn-cancel {
+  background-color: transparent;
+  color: #8c6e58;
+  border: 1px solid rgba(140, 110, 88, 0.3);
+}
+
+.calendar-modal-btn-cancel:hover {
+  background-color: rgba(140, 110, 88, 0.05);
+  transform: translateY(-2px);
+}

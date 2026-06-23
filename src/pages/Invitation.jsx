@@ -33,7 +33,50 @@ export default function Invitation({ name }) {
   const [showIntro, setShowIntro] = useState(true);
   const [showGrid, setShowGrid] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showCalendarModal, setShowCalendarModal] = useState(false);
   const containerRef = useRef(null);
+
+  const downloadIcs = () => {
+    const event = {
+      title: "Gender Reveal",
+      description: "¡Acompáñanos a descubrir el género de nuestro bebé!",
+      location: "Chongon - Paseo del Sol 4 Mz 7801 SL 22, Urbanización Paseo del Sol",
+      start: "20260815T150000",
+      end: "20260815T190000"
+    };
+
+    const icsContent = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "PRODID:-//Antigravity//Gender Reveal//ES",
+      "CALSCALE:GREGORIAN",
+      "BEGIN:VEVENT",
+      `DTSTART:${event.start}`,
+      `DTEND:${event.end}`,
+      `SUMMARY:${event.title}`,
+      `DESCRIPTION:${event.description}`,
+      `LOCATION:${event.location}`,
+      "STATUS:CONFIRMED",
+      "SEQUENCE:0",
+      "BEGIN:VALARM",
+      "TRIGGER:-PT30M",
+      "ACTION:DISPLAY",
+      "DESCRIPTION:Recordatorio de Gender Reveal",
+      "END:VALARM",
+      "END:VEVENT",
+      "END:VCALENDAR"
+    ].join("\r\n");
+
+    const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "gender_reveal.ics");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
 
   const renderAnimatedLetters = (text) => {
     return text.split("").map((char, index) => (
@@ -130,7 +173,7 @@ export default function Invitation({ name }) {
   // - [0, 1.0]: Opacidad final. Puedes cambiar el 1.0 de abajo por 0.8 si quieres regular la opacidad al 80%, etc.
   // - ['-100px', '0px']: Movimiento lateral en X de izquierda a derecha.
   // - [-90, 0]: Rotación de -90 grados (acostado de lado) a 0 grados (parado).
-  const bearSeatedOpacity = useTransform(scrollYProgress, [0.12, 0.24], [0, 0.1]);
+  const bearSeatedOpacity = useTransform(scrollYProgress, [0.12, 0.24], [0, 1.0]);
   const bearSeatedX = useTransform(scrollYProgress, [0.12, 0.24], ['-100px', '0px']);
   const bearSeatedRotate = useTransform(scrollYProgress, [0.12, 0.24], [-90, 0]);
 
@@ -138,7 +181,7 @@ export default function Invitation({ name }) {
   // - [0.01, 0.11, 0.22]: Rango de scroll (Inicio, Centro y Fin de la animación).
   // - ['-300px', '0px', '300px']: Posición X. Viene de la izquierda (-300px), llega al centro (0px) y sale por la derecha (300px).
   // - [0, 1, 0]: Opacidad. Empieza invisible (0), se hace 100% visible en el centro (1), y se desvanece al salir a la derecha (0).
-  const detailsCloudOpacity = useTransform(scrollYProgress, [0.01, 0.11, 0.22], [0, 1, 0]);
+  const detailsCloudOpacity = useTransform(scrollYProgress, [0.01, 0.90, 0.22], [0, 1, 0]);
   const detailsCloudX = useTransform(scrollYProgress, [0.01, 0.11, 0.22], ['-300px', '0px', '300px']);
 
   // Detector de Scroll
@@ -574,11 +617,11 @@ export default function Invitation({ name }) {
                   y: dateY
                 }}
               >
-                <span className="event-date-day">Viernes</span>
+                <span className="event-date-day">Sabado</span>
                 <span className="event-date-divider">|</span>
-                <span className="event-date-number">09</span>
+                <span className="event-date-number">15</span>
                 <span className="event-date-divider">|</span>
-                <span className="event-date-month">Mayo</span>
+                <span className="event-date-month">Agosto</span>
               </motion.div>
 
               {/* ==========================================
@@ -605,10 +648,19 @@ export default function Invitation({ name }) {
                     originY: 1
                   }}
                 >
-                  <img
+                  <motion.img
                     src="/images/ososentado.png"
                     alt="Osito sentado"
                     className="bear-seated-img"
+                    animate={{
+                      y: [0, -6, 0],
+                      rotate: [0, 1.5, -1.5, 0]
+                    }}
+                    transition={{
+                      duration: 4.5,
+                      repeat: Infinity,
+                      ease: "easeInOut"
+                    }}
                   />
                 </motion.div>
 
@@ -640,11 +692,28 @@ export default function Invitation({ name }) {
                   </div>
                   <div className="info-item">
                     <span className="info-label">Lugar:</span>
-                    <span className="info-value">Urbanización</span>
+                    <span className="info-value">Urbanización Paseo del Sol</span>
                   </div>
                   <div className="info-item">
                     <span className="info-label">Dirección:</span>
-                    <span className="info-value">Chongón km 10</span>
+                    <span className="info-value">Chongon - Paseo del Sol 4 Mz 7801 SL 22</span>
+                  </div>
+
+                  <div className="details-actions-container">
+                    <a
+                      href="https://www.google.com/maps?q=-2.241208553314209,-80.0711669921875&z=17&hl=es"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="details-action-btn"
+                    >
+                      <span>📍 Como llegar</span>
+                    </a>
+                    <button
+                      className="details-action-btn"
+                      onClick={() => setShowCalendarModal(true)}
+                    >
+                      <span>📅 Agregar a tus eventos</span>
+                    </button>
                   </div>
                 </div>
               </motion.div>
@@ -671,6 +740,45 @@ export default function Invitation({ name }) {
               className="fixed-scroll-arrow-container"
             >
               <span className="fixed-scroll-arrow">↓</span>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {showCalendarModal && (
+          <motion.div
+            className="calendar-modal-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowCalendarModal(false)}
+          >
+            <motion.div
+              className="calendar-modal-content"
+              initial={{ scale: 0.9, y: 20, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              exit={{ scale: 0.9, y: 20, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h4 className="calendar-modal-title">¿Deseas agregarlo?</h4>
+              <div className="calendar-modal-actions">
+                <button
+                  className="calendar-modal-btn calendar-modal-btn-confirm"
+                  onClick={() => {
+                    downloadIcs();
+                    setShowCalendarModal(false);
+                  }}
+                >
+                  Sí
+                </button>
+                <button
+                  className="calendar-modal-btn calendar-modal-btn-cancel"
+                  onClick={() => setShowCalendarModal(false)}
+                >
+                  No
+                </button>
+              </div>
             </motion.div>
           </motion.div>
         )}
