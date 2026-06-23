@@ -199,7 +199,7 @@
 
 /* Sección 2: Próximos detalles */
 .details-section {
-  min-height: 80vh; /* Reducido para evitar exceso de scroll vacío */
+  min-height: 60vh; /* Reducido para evitar exceso de scroll vacío */
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -209,7 +209,7 @@
   backdrop-filter: blur(4px);
   border-top: 1px solid rgba(255, 255, 255, 0.2);
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 1vh 1.5rem 4rem 1.5rem; /* Reducido a 1vh para que inicie exactamente en Y: 100vh y no se asome, terminando en Y: 80vh */
+  padding: 1vh 1.5rem 1.5rem 1.5rem; /* Reducido bottom padding */
   text-align: center;
   position: relative;
   z-index: 10;
@@ -643,7 +643,7 @@
 .dresscode-section {
   width: 100%;
   max-width: 450px;
-  margin: 4.5rem auto 1.5rem auto;
+  margin: -8.5rem auto 1.5rem auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -812,7 +812,7 @@
 /* Ajustes responsivos móviles para Dress Code y Regalo */
 @media (max-width: 600px) {
   .dresscode-section {
-    margin-top: 3.5rem;
+    margin-top: -8.5rem;
   }
   
   .dresscode-title {
