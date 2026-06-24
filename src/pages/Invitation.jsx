@@ -141,6 +141,8 @@ export default function Invitation({ name }) {
 
   const [userPrediction, setUserPrediction] = useState(null);
   const [votes, setVotes] = useState({ boy: 0, girl: 0 });
+  const [userRSVP, setUserRSVP] = useState(null); // null = not decided, true = yes, false = no
+  const [showRSVPModal, setShowRSVPModal] = useState(false);
 
   // Función para obtener los totales de la base de datos
   const fetchVotesFromSupabase = async () => {
@@ -172,39 +174,54 @@ export default function Invitation({ name }) {
     }
   };
 
-  // Cargar predicción previa del usuario actual y totales al montar el componente
+  // Cargar predicción previa y RSVP del usuario actual y totales al montar el componente
   useEffect(() => {
     const initPrediction = async () => {
       // 1. Obtener totales
       await fetchVotesFromSupabase();
 
-      // 2. Comprobar si este invitado ya tiene un voto registrado en Supabase
+      // 2. Comprobar si este invitado ya tiene un registro en Supabase
       if (name) {
         try {
           const { data, error } = await supabase
             .from('invitations')
-            .select('prediction')
+            .select('prediction, confirmed_attendance')
             .eq('name', name)
             .maybeSingle();
 
           if (error) {
-            console.warn('Error fetching individual prediction:', error.message);
+            console.warn('Error fetching individual prediction/RSVP:', error.message);
             const localPred = localStorage.getItem('user_prediction');
             if (localPred) setUserPrediction(localPred);
+            const localRSVP = localStorage.getItem('user_rsvp');
+            if (localRSVP) setUserRSVP(localRSVP === 'yes');
             return;
           }
 
-          if (data && data.prediction) {
-            setUserPrediction(data.prediction);
-            localStorage.setItem('user_prediction', data.prediction);
+          if (data) {
+            if (data.prediction) {
+              setUserPrediction(data.prediction);
+              localStorage.setItem('user_prediction', data.prediction);
+            }
+            if (data.confirmed_attendance !== null) {
+              setUserRSVP(data.confirmed_attendance);
+              localStorage.setItem('user_rsvp', data.confirmed_attendance ? 'yes' : 'no');
+            }
           } else {
             const localPred = localStorage.getItem('user_prediction');
-            if (localPred) {
-              setUserPrediction(localPred);
+            const localRSVP = localStorage.getItem('user_rsvp');
+            if (localPred || localRSVP !== null) {
+              if (localPred) setUserPrediction(localPred);
+              if (localRSVP !== null) setUserRSVP(localRSVP === 'yes');
+              
               // Sincronizar local a DB si no estaba
               await supabase
                 .from('invitations')
-                .insert({ name: name, prediction: localPred });
+                .insert({
+                  name: name,
+                  prediction: localPred || null,
+                  confirmed_attendance: localRSVP !== null ? (localRSVP === 'yes') : null
+                });
               await fetchVotesFromSupabase();
             }
           }
@@ -275,6 +292,40 @@ export default function Invitation({ name }) {
 
     // Sincronizar con los totales reales de Supabase en segundo plano
     await fetchVotesFromSupabase();
+  };
+
+  const handleRSVP = async (status) => {
+    setUserRSVP(status);
+    localStorage.setItem('user_rsvp', status ? 'yes' : 'no');
+
+    try {
+      const { data: existing, error: selectError } = await supabase
+        .from('invitations')
+        .select('id')
+        .eq('name', name)
+        .maybeSingle();
+
+      if (selectError) throw selectError;
+
+      if (existing) {
+        const { error: updateError } = await supabase
+          .from('invitations')
+          .update({ confirmed_attendance: status })
+          .eq('name', name);
+        if (updateError) throw updateError;
+      } else {
+        const { error: insertError } = await supabase
+          .from('invitations')
+          .insert({
+            name: name,
+            confirmed_attendance: status,
+            prediction: userPrediction || null
+          });
+        if (insertError) throw insertError;
+      }
+    } catch (err) {
+      console.error('Error saving RSVP:', err);
+    }
   };
 
   const totalVotes = votes.boy + votes.girl;
@@ -1179,6 +1230,63 @@ export default function Invitation({ name }) {
               </div>
             </motion.section>
 
+            {/* SECCIÓN 6: CONFIRMACIÓN DE ASISTENCIA (RSVP) */}
+            <motion.section
+              className="rsvp-section"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: false, amount: 0.15 }}
+              transition={{ duration: 0.7, ease: "easeOut" }}
+            >
+              <div className="rsvp-card">
+                {/* Banderilla decorativa colgada al tope de la tarjeta */}
+                <div className="rsvp-banderilla-container">
+                  <img
+                    src="/images/banderilla.png"
+                    alt="Banderillas"
+                    className="rsvp-banderilla-img"
+                  />
+                </div>
+
+                {/* Osito con globo en el centro */}
+                <div className="rsvp-bear-container">
+                  <img
+                    src="/images/osooos.png"
+                    alt="Osito con globo"
+                    className="rsvp-bear-img"
+                  />
+                </div>
+
+                {/* Textos informativos de la tarjeta */}
+                <div className="rsvp-content">
+                  <p className="rsvp-main-phrase">
+                    ¡Será un día muy especial para nuestra familia!
+                  </p>
+                  <h3 className="rsvp-question">¿Nos Acompañarás?</h3>
+                  <p className="rsvp-subtext">Por favor confirma tu asistencia</p>
+
+                  {/* Estado actual de confirmación */}
+                  {userRSVP !== null && (
+                    <div className="rsvp-status-badge">
+                      {userRSVP ? (
+                        <span className="status-yes">✓ Confirmado: Sí asistiré</span>
+                      ) : (
+                        <span className="status-no">✗ Confirmado: No podré asistir</span>
+                      )}
+                    </div>
+                  )}
+
+                  {/* Botón de Confirmación */}
+                  <button
+                    className="rsvp-confirm-btn"
+                    onClick={() => setShowRSVPModal(true)}
+                  >
+                    {userRSVP !== null ? 'Modificar confirmación' : 'Confirmar aquí'}
+                  </button>
+                </div>
+              </div>
+            </motion.section>
+
           </motion.div>
         )}
       </AnimatePresence>
@@ -1239,6 +1347,60 @@ export default function Invitation({ name }) {
                   No
                 </button>
               </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Modal de confirmación de asistencia (RSVP) */}
+      <AnimatePresence>
+        {showRSVPModal && (
+          <motion.div
+            className="rsvp-modal-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowRSVPModal(false)}
+          >
+            <motion.div
+              className="rsvp-modal-content"
+              initial={{ scale: 0.9, y: 20, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              exit={{ scale: 0.9, y: 20, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 className="rsvp-modal-title">¿Contamos contigo?</h3>
+              <p className="rsvp-modal-description">
+                Por favor, indícanos si podrás acompañarnos en este día tan especial.
+              </p>
+              
+              <div className="rsvp-modal-actions">
+                <button
+                  className="rsvp-modal-btn rsvp-btn-yes"
+                  onClick={() => {
+                    handleRSVP(true);
+                    setShowRSVPModal(false);
+                  }}
+                >
+                  Sí, asistiré
+                </button>
+                <button
+                  className="rsvp-modal-btn rsvp-btn-no"
+                  onClick={() => {
+                    handleRSVP(false);
+                    setShowRSVPModal(false);
+                  }}
+                >
+                  No podré asistir
+                </button>
+              </div>
+              <button
+                className="rsvp-modal-close-btn"
+                onClick={() => setShowRSVPModal(false)}
+              >
+                Cerrar
+              </button>
             </motion.div>
           </motion.div>
         )}

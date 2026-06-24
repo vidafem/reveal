@@ -1209,3 +1209,293 @@
     border-radius: 7px;
   }
 }
+
+/* ==============================================================
+   SECCIÓN DE CONFIRMACIÓN DE ASISTENCIA (RSVP CARD)
+   ============================================================== */
+.rsvp-section {
+  width: 100%;
+  max-width: 450px;
+  margin: 4.5rem auto 2.5rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 1.5rem;
+  z-index: 10;
+  position: relative;
+}
+
+.rsvp-card {
+  background-color: #fdfbf7;
+  border: 15px solid #ffffff; /* Marco blanco grueso */
+  box-shadow: 0 12px 35px rgba(123, 91, 66, 0.15), 0 2px 5px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 0 2.2rem 0;
+  text-align: center;
+}
+
+/* Contenedor de banderilla decorativa al tope */
+.rsvp-banderilla-container {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.rsvp-banderilla-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Contenedor del oso del centro */
+.rsvp-bear-container {
+  width: 130px;
+  margin-top: 3.8rem; /* Espacio para no chocar con la banderilla */
+  margin-bottom: 1.5rem;
+  z-index: 1;
+  mix-blend-mode: multiply;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.rsvp-bear-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Contenido de textos y botón */
+.rsvp-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 1.2rem;
+  z-index: 2;
+}
+
+.rsvp-main-phrase {
+  font-family: 'Cinzel', 'Georgia', serif;
+  font-size: 1.22rem;
+  font-weight: 600;
+  color: #7b5b42;
+  line-height: 1.45;
+  margin: 0 0 1.2rem 0;
+  letter-spacing: 0.5px;
+}
+
+.rsvp-question {
+  font-family: 'Cinzel', 'Georgia', serif;
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: #7b5b42;
+  margin: 0 0 0.6rem 0;
+  letter-spacing: 0.5px;
+}
+
+.rsvp-subtext {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #8c6e58;
+  margin: 0 0 1.8rem 0;
+}
+
+/* Botón de Confirmación */
+.rsvp-confirm-btn {
+  font-family: 'Cinzel', 'Georgia', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  background-color: #b28e47; /* Color café/tan del botón de la imagen */
+  border: none;
+  padding: 0.8rem 2.2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 5px 15px rgba(178, 142, 71, 0.3);
+  transition: all 0.25s ease;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  letter-spacing: 0.5px;
+}
+
+.rsvp-confirm-btn:hover {
+  background-color: #9c7b3b;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(178, 142, 71, 0.4);
+}
+
+.rsvp-confirm-btn:active {
+  transform: translateY(0);
+}
+
+/* Insignias de estado de asistencia actual */
+.rsvp-status-badge {
+  margin-bottom: 1.4rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 600;
+}
+
+.rsvp-status-badge span {
+  padding: 0.4rem 1rem;
+  border-radius: 20px;
+  display: inline-block;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+}
+
+.rsvp-status-badge .status-yes {
+  color: #15803d;
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+}
+
+.rsvp-status-badge .status-no {
+  color: #b91c1c;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+}
+
+/* ==============================================================
+   MODAL DE CONFIRMACIÓN (RSVP MODAL)
+   ============================================================== */
+.rsvp-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(123, 91, 66, 0.4);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  padding: 1.5rem;
+}
+
+.rsvp-modal-content {
+  background-color: #fdfbf7;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 360px;
+  padding: 2.2rem 1.8rem 1.8rem 1.8rem;
+  box-shadow: 0 12px 35px rgba(123, 91, 66, 0.25);
+  border: 1px solid rgba(197, 160, 89, 0.35);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+
+.rsvp-modal-title {
+  font-family: 'Cinzel', 'Georgia', serif;
+  font-size: 1.6rem;
+  color: #7b5b42;
+  margin: 0 0 0.8rem 0;
+  font-weight: 700;
+}
+
+.rsvp-modal-description {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  color: #8c6e58;
+  line-height: 1.5;
+  margin: 0 0 2rem 0;
+}
+
+.rsvp-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.rsvp-modal-btn {
+  font-family: 'Cinzel', 'Georgia', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  padding: 0.85rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.rsvp-btn-yes {
+  background: linear-gradient(135deg, #a7f3d0, #6ee7b7);
+  color: #064e3b;
+  border: 1px solid #34d399;
+}
+
+.rsvp-btn-yes:hover {
+  background: linear-gradient(135deg, #6ee7b7, #34d399);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(52, 211, 153, 0.2);
+}
+
+.rsvp-btn-no {
+  background: linear-gradient(135deg, #fecaca, #fca5a5);
+  color: #7f1d1d;
+  border: 1px solid #f87171;
+}
+
+.rsvp-btn-no:hover {
+  background: linear-gradient(135deg, #fca5a5, #f87171);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(248, 113, 113, 0.2);
+}
+
+.rsvp-modal-close-btn {
+  background: none;
+  border: none;
+  color: #c5a059;
+  font-family: 'Cinzel', 'Georgia', serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 0.5rem;
+}
+
+.rsvp-modal-close-btn:hover {
+  color: #7b5b42;
+}
+
+/* ==============================================================
+   RESPONSIVO MÓVIL PARA RSVP
+   ============================================================== */
+@media (max-width: 600px) {
+  .rsvp-section {
+    margin-top: 3rem;
+  }
+  .rsvp-card {
+    border-width: 10px; /* Marco ligeramente más delgado en móviles */
+    padding-bottom: 1.8rem;
+  }
+  .rsvp-bear-container {
+    width: 110px;
+    margin-top: 3rem;
+  }
+  .rsvp-main-phrase {
+    font-size: 1.1rem;
+  }
+  .rsvp-question {
+    font-size: 1.35rem;
+  }
+}
