@@ -119,16 +119,16 @@
 
 .gender-reveal-title {
   font-family: 'GreatVibes', cursive;
-  font-size: 7.2rem; /* Aumentado de 5.8rem */
+  font-size: 8.8rem; /* Aumentado a 8.8rem para que destaque fuertemente como título principal */
   color: #c5a059;
   font-weight: normal;
-  line-height: 0.95;
+  line-height: 0.9;
   margin: 0;
   text-align: center;
   white-space: nowrap;
   text-shadow: 2px 2px 5px rgba(123, 91, 66, 0.25),
     -1px -1px 0px rgba(255, 255, 255, 0.8);
-  padding-right: 28px; /* Proporcionalmente aumentado */
+  padding-right: 36px; /* Proporcionalmente aumentado */
 }
 
 .gender-word {
@@ -137,55 +137,55 @@
 
 .reveal-word {
   display: block;
-  font-size: 7.2rem; /* Aumentado de 5.8rem */
-  margin-top: 1.2rem;
+  font-size: 8.8rem; /* Aumentado a 8.8rem para que destaque fuertemente como título principal */
+  margin-top: 0.8rem; /* Reducido un poco para que no haya tanto espacio entre palabras grandes */
   color: #c5a059;
-  padding-right: 28px; /* Proporcionalmente aumentado */
+  padding-right: 36px; /* Proporcionalmente aumentado */
 }
 
 /* Ajustes responsivos para pantallas intermedias (Tablets) */
 @media (max-width: 900px) {
   .gender-reveal-title {
-    font-size: 6rem;
-    padding-right: 24px;
+    font-size: 7.2rem;
+    padding-right: 28px;
   }
   .reveal-word {
-    font-size: 6rem;
-    padding-right: 24px;
+    font-size: 7.2rem;
+    padding-right: 28px;
   }
 }
 
 /* Ajustes responsivos para móviles */
 @media (max-width: 600px) {
   .gender-reveal-title {
-    font-size: 5.2rem; /* Aumentado de 4.5rem */
-    padding-right: 22px;
+    font-size: 6.2rem;
+    padding-right: 24px;
   }
   .reveal-word {
-    font-size: 5.2rem; /* Aumentado de 4.5rem */
-    padding-right: 22px;
+    font-size: 6.2rem;
+    padding-right: 24px;
   }
 }
 
 @media (max-width: 450px) {
   .gender-reveal-title {
-    font-size: 4.4rem; /* Aumentado de 3.6rem */
-    padding-right: 18px;
+    font-size: 5.2rem;
+    padding-right: 20px;
   }
   .reveal-word {
-    font-size: 4.4rem; /* Aumentado de 3.6rem */
-    padding-right: 18px;
+    font-size: 5.2rem;
+    padding-right: 20px;
   }
 }
 
 @media (max-width: 360px) {
   .gender-reveal-title {
-    font-size: 3.8rem; /* Aumentado de 3.1rem */
-    padding-right: 15px;
+    font-size: 4.4rem;
+    padding-right: 18px;
   }
   .reveal-word {
-    font-size: 3.8rem; /* Aumentado de 3.1rem */
-    padding-right: 15px;
+    font-size: 4.4rem;
+    padding-right: 18px;
   }
 }
 
