@@ -296,6 +296,10 @@ export default function Invitation({ name }) {
   const [userRSVP, setUserRSVP] = useState(null); // null = not decided, true = yes, false = no
   const [showRSVPModal, setShowRSVPModal] = useState(false);
   const [showThankYouModal, setShowThankYouModal] = useState(false);
+  const [showAdminList, setShowAdminList] = useState(false);
+  const [guestListData, setGuestListData] = useState([]);
+  const [loadingAdminList, setLoadingAdminList] = useState(false);
+  const [adminSearch, setAdminSearch] = useState('');
 
   // Función para obtener los totales de la base de datos
   const fetchVotesFromSupabase = async () => {
@@ -720,7 +724,8 @@ export default function Invitation({ name }) {
     }
   }, [showThankYouModal]);
 
-  const downloadGuestList = async () => {
+  const loadGuestList = async () => {
+    setLoadingAdminList(true);
     try {
       const { data, error } = await supabase
         .from('invitations')
@@ -729,37 +734,13 @@ export default function Invitation({ name }) {
 
       if (error) throw error;
 
-      if (!data || data.length === 0) {
-        alert("No hay registros en la lista todavía.");
-        return;
-      }
-
-      // Convert to CSV with UTF-8 BOM
-      const headers = ["Nombre", "Prediccion", "Confirmacion Asistencia", "Fecha de Registro"];
-      const rows = data.map(item => [
-        item.name || '',
-        item.prediction === 'boy' ? 'Niño' : item.prediction === 'girl' ? 'Niña' : 'Sin predicción',
-        item.confirmed_attendance === true ? 'Sí' : item.confirmed_attendance === false ? 'No' : 'No decidido',
-        item.created_at ? new Date(item.created_at).toLocaleString() : ''
-      ]);
-
-      const csvContent = "\ufeff" + [
-        headers.join(','),
-        ...rows.map(e => e.map(val => `"${String(val).replace(/"/g, '""')}"`).join(','))
-      ].join('\n');
-
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.setAttribute("href", url);
-      link.setAttribute("download", `lista_invitados_${new Date().toISOString().slice(0, 10)}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
+      setGuestListData(data || []);
+      setShowAdminList(true);
     } catch (err) {
-      console.error("Error downloading guest list:", err);
-      alert("Error al descargar la lista de invitados: " + err.message);
+      console.error("Error loading guest list:", err);
+      alert("Error al cargar la lista de invitados: " + err.message);
+    } finally {
+      setLoadingAdminList(false);
     }
   };
 
@@ -1538,8 +1519,12 @@ export default function Invitation({ name }) {
 
             {isAdmin && (
               <div className="admin-section-container">
-                <button className="admin-list-btn" onClick={downloadGuestList}>
-                  📊 Verificar Lista
+                <button 
+                  className="admin-list-btn" 
+                  onClick={loadGuestList}
+                  disabled={loadingAdminList}
+                >
+                  {loadingAdminList ? '⏳ Cargando lista...' : '📊 Verificar Lista'}
                 </button>
               </div>
             )}
@@ -1694,6 +1679,116 @@ export default function Invitation({ name }) {
               </p>
               <div className="thanks-sparkle-decor">✦ ✦ ✦</div>
             </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Vista de Administrador - Listado de Invitados */}
+      <AnimatePresence>
+        {showAdminList && (
+          <motion.div
+            className="admin-list-page"
+            initial={{ opacity: 0, x: '100vw' }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: '100vw' }}
+            transition={{ type: "spring", damping: 25, stiffness: 220 }}
+          >
+            <div className="admin-list-header">
+              <button 
+                className="admin-list-back-btn"
+                onClick={() => {
+                  setShowAdminList(false);
+                  setAdminSearch('');
+                }}
+              >
+                ← Volver
+              </button>
+              <h2 className="admin-list-title">Lista de Invitados</h2>
+            </div>
+
+            <div className="admin-list-content">
+              {/* Buscador */}
+              <div className="admin-search-container">
+                <input 
+                  type="text" 
+                  className="admin-search-input"
+                  placeholder="Buscar por nombre..."
+                  value={adminSearch}
+                  onChange={(e) => setAdminSearch(e.target.value)}
+                />
+                {adminSearch && (
+                  <button className="admin-search-clear" onClick={() => setAdminSearch('')}>
+                    ✕
+                  </button>
+                )}
+              </div>
+
+              {/* Resumen de totales */}
+              <div className="admin-list-summary">
+                <div className="summary-card">
+                  <span className="summary-number">{guestListData.length}</span>
+                  <span className="summary-label">Total</span>
+                </div>
+                <div className="summary-card">
+                  <span className="summary-number boy-color">
+                    {guestListData.filter(g => g.prediction === 'boy').length}
+                  </span>
+                  <span className="summary-label">Niño</span>
+                </div>
+                <div className="summary-card">
+                  <span className="summary-number girl-color">
+                    {guestListData.filter(g => g.prediction === 'girl').length}
+                  </span>
+                  <span className="summary-label">Niña</span>
+                </div>
+                <div className="summary-card">
+                  <span className="summary-number attend-color">
+                    {guestListData.filter(g => g.confirmed_attendance === true).length}
+                  </span>
+                  <span className="summary-label">Asistirán</span>
+                </div>
+              </div>
+
+              {/* Listado en tarjetas responsive */}
+              {guestListData.length === 0 ? (
+                <p className="no-guests-msg">No hay invitados registrados todavía.</p>
+              ) : (
+                <div className="guests-cards-list">
+                  {guestListData
+                    .filter(g => (g.name || '').toLowerCase().includes(adminSearch.toLowerCase()))
+                    .map((guest, idx) => (
+                      <div className="guest-row-card" key={idx}>
+                        <div className="guest-info-left">
+                          <span className="guest-name">{guest.name || 'Sin nombre'}</span>
+                          <span className="guest-date">
+                            {guest.created_at ? new Date(guest.created_at).toLocaleDateString() : ''}
+                          </span>
+                        </div>
+                        <div className="guest-tags-right">
+                          {guest.prediction === 'boy' ? (
+                            <span className="tag-boy">💙 Niño</span>
+                          ) : guest.prediction === 'girl' ? (
+                            <span className="tag-girl">💗 Niña</span>
+                          ) : (
+                            <span className="tag-none">Sin voto</span>
+                          )}
+                          
+                          {guest.confirmed_attendance === true ? (
+                            <span className="badge-yes">✓ Asistirá</span>
+                          ) : guest.confirmed_attendance === false ? (
+                            <span className="badge-no">✗ No asistirá</span>
+                          ) : (
+                            <span className="badge-none">? Pendiente</span>
+                          )}
+                        </div>
+                      </div>
+                  ))}
+                  {guestListData.filter(g => (g.name || '').toLowerCase().includes(adminSearch.toLowerCase())).length === 0 && (
+                    <p className="no-guests-msg">No se encontraron resultados para "{adminSearch}".</p>
+                  )}
+                </div>
+              )}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
