@@ -221,10 +221,11 @@ export default function Invitation({ name }) {
     let newPrediction = gender;
 
     if (userPrediction === gender) {
-      // Desmarcar voto
+      // Desmarcar voto — actualización optimista inmediata
       newPrediction = null;
       setUserPrediction(null);
       localStorage.removeItem('user_prediction');
+      setVotes(prev => ({ ...prev, [gender]: Math.max(0, prev[gender] - 1) }));
 
       try {
         const { error } = await supabase
@@ -236,9 +237,15 @@ export default function Invitation({ name }) {
         console.error('Error deleting prediction:', err);
       }
     } else {
-      // Marcar nuevo voto o actualizar el existente
+      // Marcar nuevo voto o actualizar el existente — actualización optimista inmediata
+      const prevPrediction = userPrediction;
       setUserPrediction(gender);
       localStorage.setItem('user_prediction', gender);
+      setVotes(prev => {
+        const updated = { ...prev, [gender]: prev[gender] + 1 };
+        if (prevPrediction) updated[prevPrediction] = Math.max(0, updated[prevPrediction] - 1);
+        return updated;
+      });
 
       try {
         const { data: existing, error: selectError } = await supabase
@@ -266,7 +273,7 @@ export default function Invitation({ name }) {
       }
     }
 
-    // Recargar los totales actualizados en tiempo real
+    // Sincronizar con los totales reales de Supabase en segundo plano
     await fetchVotesFromSupabase();
   };
 

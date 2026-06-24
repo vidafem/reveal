@@ -121,6 +121,8 @@
   font-weight: normal;
   line-height: 0.95;
   margin: 0;
+  text-align: center;
+  white-space: nowrap;
   text-shadow: 2px 2px 5px rgba(123, 91, 66, 0.25),
     -1px -1px 0px rgba(255, 255, 255, 0.8);
 }
@@ -144,6 +146,9 @@
   transform: translateX(-50%);
   z-index: 1;
   text-align: center;
+  width: max-content;
+  max-width: 90vw;
+  padding: 0 8px;
 }
 
 .invitation-bear-container {

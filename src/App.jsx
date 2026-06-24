@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Home from './pages/Home';
 import Invitation from './pages/Invitation';
 import './index.css';
 
 function App() {
-  const [page, setPage] = useState('home'); // 'home' o 'invitation'
-  const [guestName, setGuestName] = useState('');
+  // Intentar restaurar la sesión guardada localmente
+  const savedName = localStorage.getItem('guest_name') || '';
+  const [page, setPage] = useState(savedName ? 'invitation' : 'home');
+  const [guestName, setGuestName] = useState(savedName);
 
   const handleStartInvitation = (name) => {
+    // Guardar el nombre en localStorage para mantener la sesión al refrescar
+    localStorage.setItem('guest_name', name);
     setGuestName(name);
     setPage('invitation');
   };
