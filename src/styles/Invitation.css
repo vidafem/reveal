@@ -119,13 +119,12 @@
 
 .gender-reveal-title {
   font-family: 'GreatVibes', cursive;
-  font-size: 5.8rem;
+  font-size: clamp(4rem, 13vw, 5.8rem);
   color: #c5a059;
   font-weight: normal;
   line-height: 0.95;
   margin: 0;
   text-align: center;
-  white-space: nowrap;
   text-shadow: 2px 2px 5px rgba(123, 91, 66, 0.25),
     -1px -1px 0px rgba(255, 255, 255, 0.8);
 }
@@ -136,7 +135,7 @@
 
 .reveal-word {
   display: block;
-  font-size: 5.8rem;
+  font-size: clamp(4rem, 13vw, 5.8rem);
   margin-top: 1.2rem;
   color: #c5a059;
 }
@@ -172,13 +171,11 @@
 .gender-reveal-title-container {
   position: absolute;
   top: 24vh;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
   z-index: 1;
   text-align: center;
-  width: max-content;
-  max-width: 90vw;
-  padding: 0 8px;
+  padding: 0 12px;
 }
 
 .invitation-bear-container {
@@ -491,22 +488,13 @@
 .fixed-scroll-indicator {
   position: fixed;
   bottom: 28px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: auto;
-  height: auto;
-  border-radius: 50px;
-  background-color: rgba(253, 251, 247, 0.88);
-  border: 1px solid rgba(197, 160, 89, 0.45);
-  box-shadow: 0 4px 20px rgba(123, 91, 66, 0.15);
+  left: 0;
+  right: 0;
   display: flex;
-  align-items: center;
   justify-content: center;
-  padding: 0.5rem 1.2rem;
+  align-items: center;
   z-index: 9999;
   pointer-events: none;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
 }
 
 .fixed-scroll-arrow-container {

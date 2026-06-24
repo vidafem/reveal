@@ -740,11 +740,11 @@ export default function Invitation({ name }) {
 
             {/* SECCIÓN 1: HÉROE (Portada) */}
             <section className="hero-section">
-              {/* Título "Gender Reveal" - BAJADO a 24vh */}
+              {/* Título "Gender Reveal" */}
               <motion.div
                 className="gender-reveal-title-container"
-                initial={{ opacity: 0, y: 40, x: '-50%' }}
-                animate={{ opacity: 1, y: 0, x: '-50%' }}
+                initial={{ opacity: 0, y: 40 }}
+                animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1.5, ease: "easeOut", delay: 0.3 }}
               >
                 <motion.h2
