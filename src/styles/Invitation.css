@@ -119,14 +119,16 @@
 
 .gender-reveal-title {
   font-family: 'GreatVibes', cursive;
-  font-size: clamp(4rem, 13vw, 5.8rem);
+  font-size: 5.8rem;
   color: #c5a059;
   font-weight: normal;
   line-height: 0.95;
   margin: 0;
   text-align: center;
+  white-space: nowrap;
   text-shadow: 2px 2px 5px rgba(123, 91, 66, 0.25),
     -1px -1px 0px rgba(255, 255, 255, 0.8);
+  padding-right: 22px; /* Espacio extra para que la cola de la 'L' cursiva no se corte */
 }
 
 .gender-word {
@@ -135,9 +137,44 @@
 
 .reveal-word {
   display: block;
-  font-size: clamp(4rem, 13vw, 5.8rem);
+  font-size: 5.8rem;
   margin-top: 1.2rem;
   color: #c5a059;
+  padding-right: 22px; /* Espacio extra para que la cola de la 'L' cursiva no se corte */
+}
+
+/* Ajustes responsivos para que el título no desborde la pantalla en celulares */
+@media (max-width: 600px) {
+  .gender-reveal-title {
+    font-size: 4.5rem;
+    padding-right: 18px;
+  }
+  .reveal-word {
+    font-size: 4.5rem;
+    padding-right: 18px;
+  }
+}
+
+@media (max-width: 450px) {
+  .gender-reveal-title {
+    font-size: 3.6rem;
+    padding-right: 15px;
+  }
+  .reveal-word {
+    font-size: 3.6rem;
+    padding-right: 15px;
+  }
+}
+
+@media (max-width: 360px) {
+  .gender-reveal-title {
+    font-size: 3.1rem;
+    padding-right: 12px;
+  }
+  .reveal-word {
+    font-size: 3.1rem;
+    padding-right: 12px;
+  }
 }
 
 .gender-reveal-subtitle {
@@ -171,11 +208,13 @@
 .gender-reveal-title-container {
   position: absolute;
   top: 24vh;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 1;
   text-align: center;
-  padding: 0 12px;
+  width: max-content;
+  max-width: 90vw;
+  padding: 0 8px;
 }
 
 .invitation-bear-container {
@@ -490,11 +529,14 @@
   bottom: 28px;
   left: 0;
   right: 0;
+  margin: 0 auto;
+  width: max-content;
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
   z-index: 9999;
   pointer-events: none;
+  /* Eliminadas propiedades de cápsula: fondo, borde, sombra y bordes redondeados */
 }
 
 .fixed-scroll-arrow-container {
@@ -502,23 +544,25 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 2px;
+  gap: 4px;
 }
 
 .fixed-scroll-label {
   font-family: 'Georgia', serif;
-  font-size: 0.72rem;
-  color: #8c6e58;
-  letter-spacing: 1.5px;
+  font-size: 0.78rem;
+  color: #7b5b42; /* Color café más legible e integrado */
+  letter-spacing: 2px;
   text-transform: uppercase;
   white-space: nowrap;
+  text-shadow: 0 1px 4px rgba(253, 251, 247, 0.95), 0 0 8px rgba(253, 251, 247, 0.9);
 }
 
 .fixed-scroll-arrow {
-  color: #c5a059;
-  font-size: 1.1rem;
+  color: #b28e47; /* Dorado más oscuro para mejor contraste */
+  font-size: 1.3rem;
   font-weight: bold;
   line-height: 1;
+  text-shadow: 0 1px 4px rgba(253, 251, 247, 0.95), 0 0 8px rgba(253, 251, 247, 0.9);
 }
 
 /* Botones de Acción (Cómo Llegar / Agregar Calendario) */
