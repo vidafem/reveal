@@ -1223,10 +1223,12 @@
   padding: 0 1.5rem;
   z-index: 10;
   position: relative;
+  perspective: 1000px; /* Habilita efecto 3D */
+  transform-style: preserve-3d;
 }
 
 .rsvp-card {
-  background-color: #fdfbf7;
+  background-color: #f6f3eb; /* Beige muy claro y delicado que contrasta con el marco blanco */
   border: 15px solid #ffffff; /* Marco blanco grueso */
   box-shadow: 0 12px 35px rgba(123, 91, 66, 0.15), 0 2px 5px rgba(0, 0, 0, 0.05);
   border-radius: 12px;
@@ -1236,16 +1238,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0 0 2.2rem 0;
+  padding: 0 0 1.8rem 0; /* Más compacta */
   text-align: center;
 }
 
-/* Contenedor de banderilla decorativa al tope */
+/* Contenedor de banderilla decorativa al tope (ahora posicionamiento relativo) */
 .rsvp-banderilla-container {
   width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative;
+  margin-top: -10px; /* Ajuste sutil hacia el borde superior */
+  margin-bottom: 0.5rem;
   z-index: 2;
   pointer-events: none;
 }
@@ -1256,13 +1258,13 @@
   display: block;
 }
 
-/* Contenedor del oso del centro */
+/* Contenedor del oso del centro (debajo de la banderilla) */
 .rsvp-bear-container {
-  width: 130px;
-  margin-top: 3.8rem; /* Espacio para no chocar con la banderilla */
-  margin-bottom: 1.5rem;
+  width: 140px;
+  margin-top: 0; /* Al estar en bloque relativo, se apila de forma natural sin espacios vacíos */
+  margin-bottom: 1rem;
   z-index: 1;
-  mix-blend-mode: multiply;
+  /* mix-blend-mode: multiply; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -1477,6 +1479,22 @@
   color: #7b5b42;
 }
 
+/* Estrella animada al final de la tarjeta RSVP */
+.rsvp-bottom-star-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 1.8rem;
+  z-index: 2;
+}
+
+.rsvp-bottom-star {
+  width: 26px; /* Pequeña */
+  height: auto;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
 /* ==============================================================
    RESPONSIVO MÓVIL PARA RSVP
    ============================================================== */
@@ -1486,11 +1504,12 @@
   }
   .rsvp-card {
     border-width: 10px; /* Marco ligeramente más delgado en móviles */
-    padding-bottom: 1.8rem;
+    padding-bottom: 1.8rem; /* Más compacto */
   }
   .rsvp-bear-container {
     width: 110px;
-    margin-top: 3rem;
+    margin-top: 0; /* Al estar en bloque relativo, se apila sin margen superior extra */
+    margin-bottom: 0.8rem;
   }
   .rsvp-main-phrase {
     font-size: 1.1rem;
@@ -1498,4 +1517,111 @@
   .rsvp-question {
     font-size: 1.35rem;
   }
+}
+
+/* ==============================================================
+   ESTILOS DE AGRADECIMIENTO RSVP (THANKS MODAL)
+   ============================================================== */
+.rsvp-thanks-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(123, 91, 66, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 20000; /* Por encima de la confirmación */
+  padding: 1.5rem;
+}
+
+.rsvp-thanks-content {
+  background-color: rgba(253, 251, 247, 0.98);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 360px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 15px 40px rgba(123, 91, 66, 0.25);
+  border: 2px solid rgba(197, 160, 89, 0.45);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  position: relative;
+}
+
+.thanks-icon-wrapper {
+  margin-bottom: 1rem;
+}
+
+.thanks-title {
+  font-family: 'GreatVibes', cursive;
+  font-size: 3.2rem;
+  color: #7b5b42;
+  margin: 0 0 1rem 0;
+  font-weight: normal;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+}
+
+.thanks-message {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.95rem;
+  color: #8c6e58;
+  line-height: 1.6;
+  margin: 0 0 1.5rem 0;
+}
+
+.thanks-sparkle-decor {
+  font-size: 1.1rem;
+  color: #c5a059;
+  letter-spacing: 4px;
+}
+
+/* ==============================================================
+   SECCIÓN DE ADMINISTRADOR (VERIFICAR LISTA)
+   ============================================================== */
+.admin-section-container {
+  width: 100%;
+  max-width: 450px;
+  display: flex;
+  justify-content: center;
+  margin: 2.5rem auto 0 auto;
+  padding: 0 1.5rem;
+  z-index: 100;
+  position: relative;
+}
+
+.admin-list-btn {
+  font-family: 'Cinzel', 'Georgia', serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #7b5b42;
+  background-color: #fdfbf7;
+  border: 2px dashed #c5a059;
+  padding: 0.8rem 1.8rem;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(123, 91, 66, 0.1);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.admin-list-btn:hover {
+  background-color: #c5a059;
+  color: #fdfbf7;
+  border-style: solid;
+  border-color: #7b5b42;
+  transform: scale(1.03);
+  box-shadow: 0 8px 20px rgba(197, 160, 89, 0.25);
+}
+
+.admin-list-btn:active {
+  transform: scale(1.0);
 }

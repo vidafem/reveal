@@ -84,6 +84,42 @@ const giftCardVariants = {
   }
 };
 
+const rsvpCardVariants = {
+  hidden: { 
+    opacity: 0, 
+    y: 90, 
+    scale: 0.93,
+    rotateX: 10
+  },
+  visible: { 
+    opacity: 1, 
+    y: 0, 
+    scale: 1,
+    rotateX: 0,
+    transition: {
+      type: "spring",
+      damping: 22,
+      stiffness: 65,
+      mass: 1.1,
+      staggerChildren: 0.12,
+      delayChildren: 0.1
+    }
+  }
+};
+
+const rsvpChildVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: {
+      type: "spring",
+      damping: 18,
+      stiffness: 90
+    }
+  }
+};
+
 const sparkles = [
   { top: '12%', left: '8%', color: '#c5a059', delay: 0.1, duration: 2.1, size: '10px' },
   { top: '22%', right: '10%', color: '#93c5fd', delay: 0.5, duration: 2.8, size: '12px' },
@@ -133,6 +169,122 @@ function BackgroundSparkle({ sp, scrollYProgress }) {
   );
 }
 
+// Component to render video with transparent black background (Luma Key)
+function LumaKeyVideo({ src, className, threshold = 18 }) {
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    const canvas = canvasRef.current;
+    if (!video || !canvas) return;
+
+    console.log("LumaKeyVideo mounted, src:", src);
+
+    let animationFrameId;
+    const ctx = canvas.getContext('2d', { willReadFrequently: true });
+    let hasLoggedDimensions = false;
+
+    const render = () => {
+      if (video.paused || video.ended) {
+        animationFrameId = requestAnimationFrame(render);
+        return;
+      }
+
+      const videoWidth = video.videoWidth;
+      const videoHeight = video.videoHeight;
+
+      if (videoWidth && videoHeight) {
+        if (!hasLoggedDimensions) {
+          console.log(`Video dimensions loaded: ${videoWidth}x${videoHeight}`);
+          hasLoggedDimensions = true;
+        }
+
+        // Downsample target size for canvas to ensure smooth performance
+        const targetWidth = 280; 
+        const targetHeight = Math.round(targetWidth * (videoHeight / videoWidth));
+
+        if (canvas.width !== targetWidth || canvas.height !== targetHeight) {
+          canvas.width = targetWidth;
+          canvas.height = targetHeight;
+        }
+
+        ctx.drawImage(video, 0, 0, targetWidth, targetHeight);
+        const imgData = ctx.getImageData(0, 0, targetWidth, targetHeight);
+        const data = imgData.data;
+
+        for (let i = 0; i < data.length; i += 4) {
+          const r = data[i];
+          const g = data[i + 1];
+          const b = data[i + 2];
+          
+          // Luma calculation: weighted average of RGB
+          const luma = 0.299 * r + 0.587 * g + 0.114 * b;
+          
+          if (luma < threshold) {
+            // Smoothly fade alpha near the threshold
+            const alphaFactor = luma / threshold;
+            data[i + 3] = Math.round(data[i + 3] * alphaFactor);
+          }
+        }
+        ctx.putImageData(imgData, 0, 0);
+      }
+
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    const handlePlay = () => {
+      console.log("Video started playing event");
+      render();
+    };
+
+    video.addEventListener('play', handlePlay);
+    video.addEventListener('playing', () => console.log("Video playing stream"));
+    video.addEventListener('error', (e) => console.error("Video error event:", video.error));
+
+    // Force load and play the video
+    video.load();
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        console.log("Video autoplay success");
+      }).catch(error => {
+        console.warn("Video autoplay failed, trying again on user action:", error);
+      });
+    }
+
+    if (!video.paused) {
+      render();
+    }
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      video.removeEventListener('play', handlePlay);
+    };
+  }, [src, threshold]);
+
+  return (
+    <>
+      <video
+        ref={videoRef}
+        src={src}
+        loop
+        muted
+        playsInline
+        autoPlay
+        style={{
+          position: 'absolute',
+          width: '1px',
+          height: '1px',
+          opacity: 0,
+          pointerEvents: 'none'
+        }}
+      />
+      <canvas ref={canvasRef} className={className} />
+    </>
+  );
+}
+
 export default function Invitation({ name }) {
   const [showIntro, setShowIntro] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -143,6 +295,7 @@ export default function Invitation({ name }) {
   const [votes, setVotes] = useState({ boy: 0, girl: 0 });
   const [userRSVP, setUserRSVP] = useState(null); // null = not decided, true = yes, false = no
   const [showRSVPModal, setShowRSVPModal] = useState(false);
+  const [showThankYouModal, setShowThankYouModal] = useState(false);
 
   // Función para obtener los totales de la base de datos
   const fetchVotesFromSupabase = async () => {
@@ -297,6 +450,7 @@ export default function Invitation({ name }) {
   const handleRSVP = async (status) => {
     setUserRSVP(status);
     localStorage.setItem('user_rsvp', status ? 'yes' : 'no');
+    setShowThankYouModal(true);
 
     try {
       const { data: existing, error: selectError } = await supabase
@@ -555,7 +709,59 @@ export default function Invitation({ name }) {
     }
   }, [showIntro]);
 
+  const isAdmin = name && name.toLowerCase() === 'administrador';
 
+  useEffect(() => {
+    if (showThankYouModal) {
+      const timer = setTimeout(() => {
+        setShowThankYouModal(false);
+      }, 2500);
+      return () => clearTimeout(timer);
+    }
+  }, [showThankYouModal]);
+
+  const downloadGuestList = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('invitations')
+        .select('name, prediction, confirmed_attendance, created_at')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      if (!data || data.length === 0) {
+        alert("No hay registros en la lista todavía.");
+        return;
+      }
+
+      // Convert to CSV with UTF-8 BOM
+      const headers = ["Nombre", "Prediccion", "Confirmacion Asistencia", "Fecha de Registro"];
+      const rows = data.map(item => [
+        item.name || '',
+        item.prediction === 'boy' ? 'Niño' : item.prediction === 'girl' ? 'Niña' : 'Sin predicción',
+        item.confirmed_attendance === true ? 'Sí' : item.confirmed_attendance === false ? 'No' : 'No decidido',
+        item.created_at ? new Date(item.created_at).toLocaleString() : ''
+      ]);
+
+      const csvContent = "\ufeff" + [
+        headers.join(','),
+        ...rows.map(e => e.map(val => `"${String(val).replace(/"/g, '""')}"`).join(','))
+      ].join('\n');
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `lista_invitados_${new Date().toISOString().slice(0, 10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("Error downloading guest list:", err);
+      alert("Error al descargar la lista de invitados: " + err.message);
+    }
+  };
 
   return (
     <div className="invitation-container" ref={containerRef}>
@@ -1233,59 +1439,110 @@ export default function Invitation({ name }) {
             {/* SECCIÓN 6: CONFIRMACIÓN DE ASISTENCIA (RSVP) */}
             <motion.section
               className="rsvp-section"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              initial="hidden"
+              whileInView="visible"
               viewport={{ once: false, amount: 0.15 }}
-              transition={{ duration: 0.7, ease: "easeOut" }}
+              variants={rsvpCardVariants}
             >
               <div className="rsvp-card">
                 {/* Banderilla decorativa colgada al tope de la tarjeta */}
-                <div className="rsvp-banderilla-container">
+                <motion.div 
+                  className="rsvp-banderilla-container"
+                  variants={rsvpChildVariants}
+                >
                   <img
                     src="/images/banderilla.png"
                     alt="Banderillas"
                     className="rsvp-banderilla-img"
                   />
-                </div>
+                </motion.div>
 
-                {/* Osito con globo en el centro */}
-                <div className="rsvp-bear-container">
-                  <img
-                    src="/images/osooos.png"
-                    alt="Osito con globo"
+                {/* Osito con globo (o twin bears) en el centro (debajo de la banderilla) */}
+                <motion.div 
+                  className="rsvp-bear-container"
+                  variants={rsvpChildVariants}
+                >
+                  <LumaKeyVideo
+                    src="/images/ososani.mp4"
                     className="rsvp-bear-img"
+                    threshold={18}
                   />
-                </div>
+                </motion.div>
 
                 {/* Textos informativos de la tarjeta */}
                 <div className="rsvp-content">
-                  <p className="rsvp-main-phrase">
+                  <motion.p 
+                    className="rsvp-main-phrase"
+                    variants={rsvpChildVariants}
+                  >
                     ¡Será un día muy especial para nuestra familia!
-                  </p>
-                  <h3 className="rsvp-question">¿Nos Acompañarás?</h3>
-                  <p className="rsvp-subtext">Por favor confirma tu asistencia</p>
+                  </motion.p>
+                  <motion.h3 
+                    className="rsvp-question"
+                    variants={rsvpChildVariants}
+                  >
+                    ¿Nos Acompañarás?
+                  </motion.h3>
+                  <motion.p 
+                    className="rsvp-subtext"
+                    variants={rsvpChildVariants}
+                  >
+                    Por favor confirma tu asistencia
+                  </motion.p>
 
                   {/* Estado actual de confirmación */}
                   {userRSVP !== null && (
-                    <div className="rsvp-status-badge">
+                    <motion.div 
+                      className="rsvp-status-badge"
+                      variants={rsvpChildVariants}
+                    >
                       {userRSVP ? (
                         <span className="status-yes">✓ Confirmado: Sí asistiré</span>
                       ) : (
                         <span className="status-no">✗ Confirmado: No podré asistir</span>
                       )}
-                    </div>
+                    </motion.div>
                   )}
 
                   {/* Botón de Confirmación */}
-                  <button
+                  <motion.button
                     className="rsvp-confirm-btn"
                     onClick={() => setShowRSVPModal(true)}
+                    variants={rsvpChildVariants}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     {userRSVP !== null ? 'Modificar confirmación' : 'Confirmar aquí'}
-                  </button>
+                  </motion.button>
                 </div>
               </div>
+
+              {/* Estrella animada fuera de la tarjeta al final de la página */}
+              <div className="rsvp-bottom-star-container">
+                <motion.img
+                  src="/images/estre.png"
+                  alt="Estrella decorativa"
+                  className="rsvp-bottom-star"
+                  animate={{
+                    x: [-12, 12, -12],
+                    rotate: [-45, 45, -45]
+                  }}
+                  transition={{
+                    repeat: Infinity,
+                    duration: 3.5,
+                    ease: "easeInOut"
+                  }}
+                />
+              </div>
             </motion.section>
+
+            {isAdmin && (
+              <div className="admin-section-container">
+                <button className="admin-list-btn" onClick={downloadGuestList}>
+                  📊 Verificar Lista
+                </button>
+              </div>
+            )}
 
           </motion.div>
         )}
@@ -1371,9 +1628,6 @@ export default function Invitation({ name }) {
               onClick={(e) => e.stopPropagation()}
             >
               <h3 className="rsvp-modal-title">¿Contamos contigo?</h3>
-              <p className="rsvp-modal-description">
-                Por favor, indícanos si podrás acompañarnos en este día tan especial.
-              </p>
               
               <div className="rsvp-modal-actions">
                 <button
@@ -1401,6 +1655,44 @@ export default function Invitation({ name }) {
               >
                 Cerrar
               </button>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Modal de "Gracias por confirmar" */}
+      <AnimatePresence>
+        {showThankYouModal && (
+          <motion.div
+            className="rsvp-thanks-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowThankYouModal(false)}
+          >
+            <motion.div
+              className="rsvp-thanks-content"
+              initial={{ scale: 0.9, y: 20, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              exit={{ scale: 0.9, y: 20, opacity: 0 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="thanks-icon-wrapper">
+                <motion.span
+                  className="thanks-heart"
+                  animate={{ scale: [1, 1.25, 1] }}
+                  transition={{ repeat: Infinity, duration: 1.2, ease: "easeInOut" }}
+                  style={{ display: 'inline-block', fontSize: '2.5rem' }}
+                >
+                  ❤️
+                </motion.span>
+              </div>
+              <h3 className="thanks-title">¡Gracias por confirmar!</h3>
+              <p className="thanks-message">
+                Tu respuesta ha sido guardada. ¡Nos hace muy felices compartir este momento tan especial contigo!
+              </p>
+              <div className="thanks-sparkle-decor">✦ ✦ ✦</div>
             </motion.div>
           </motion.div>
         )}
