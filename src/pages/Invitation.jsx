@@ -1681,9 +1681,7 @@ export default function Invitation({ name, onLogout }) {
                 </motion.span>
               </div>
               <h3 className="thanks-title">¡Gracias por confirmar!</h3>
-              <p className="thanks-message">
-                .
-              </p>
+
               <div className="thanks-sparkle-decor">✦ ✦ ✦</div>
             </motion.div>
           </motion.div>
