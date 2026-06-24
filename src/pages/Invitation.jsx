@@ -285,7 +285,7 @@ function LumaKeyVideo({ src, className, threshold = 18 }) {
   );
 }
 
-export default function Invitation({ name }) {
+export default function Invitation({ name, onLogout }) {
   const [showIntro, setShowIntro] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showCalendarModal, setShowCalendarModal] = useState(false);
@@ -1528,6 +1528,13 @@ export default function Invitation({ name }) {
                 </button>
               </div>
             )}
+
+            {/* Botón de Salir al final de la página */}
+            <div className="logout-container">
+              <button className="logout-btn" onClick={onLogout}>
+                Salir
+              </button>
+            </div>
 
           </motion.div>
         )}

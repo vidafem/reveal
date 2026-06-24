@@ -16,10 +16,18 @@ function App() {
     setPage('invitation');
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('guest_name');
+    localStorage.removeItem('user_prediction');
+    localStorage.removeItem('user_rsvp');
+    setGuestName('');
+    setPage('home');
+  };
+
   return (
     <div className="app-container">
       {page === 'home' && <Home onEnter={handleStartInvitation} />}
-      {page === 'invitation' && <Invitation name={guestName} />}
+      {page === 'invitation' && <Invitation name={guestName} onLogout={handleLogout} />}
     </div>
   );
 }
