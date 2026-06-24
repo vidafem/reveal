@@ -85,15 +85,15 @@ const giftCardVariants = {
 };
 
 const rsvpCardVariants = {
-  hidden: { 
-    opacity: 0, 
-    y: 90, 
+  hidden: {
+    opacity: 0,
+    y: 90,
     scale: 0.93,
     rotateX: 10
   },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
+  visible: {
+    opacity: 1,
+    y: 0,
     scale: 1,
     rotateX: 0,
     transition: {
@@ -109,8 +109,8 @@ const rsvpCardVariants = {
 
 const rsvpChildVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     y: 0,
     transition: {
       type: "spring",
@@ -201,7 +201,7 @@ function LumaKeyVideo({ src, className, threshold = 18 }) {
         }
 
         // Downsample target size for canvas to ensure smooth performance
-        const targetWidth = 280; 
+        const targetWidth = 280;
         const targetHeight = Math.round(targetWidth * (videoHeight / videoWidth));
 
         if (canvas.width !== targetWidth || canvas.height !== targetHeight) {
@@ -217,10 +217,10 @@ function LumaKeyVideo({ src, className, threshold = 18 }) {
           const r = data[i];
           const g = data[i + 1];
           const b = data[i + 2];
-          
+
           // Luma calculation: weighted average of RGB
           const luma = 0.299 * r + 0.587 * g + 0.114 * b;
-          
+
           if (luma < threshold) {
             // Smoothly fade alpha near the threshold
             const alphaFactor = luma / threshold;
@@ -370,7 +370,7 @@ export default function Invitation({ name, onLogout }) {
             if (localPred || localRSVP !== null) {
               if (localPred) setUserPrediction(localPred);
               if (localRSVP !== null) setUserRSVP(localRSVP === 'yes');
-              
+
               // Sincronizar local a DB si no estaba
               await supabase
                 .from('invitations')
@@ -1427,7 +1427,7 @@ export default function Invitation({ name, onLogout }) {
             >
               <div className="rsvp-card">
                 {/* Banderilla decorativa colgada al tope de la tarjeta */}
-                <motion.div 
+                <motion.div
                   className="rsvp-banderilla-container"
                   variants={rsvpChildVariants}
                 >
@@ -1439,7 +1439,7 @@ export default function Invitation({ name, onLogout }) {
                 </motion.div>
 
                 {/* Osito con globo (o twin bears) en el centro (debajo de la banderilla) */}
-                <motion.div 
+                <motion.div
                   className="rsvp-bear-container"
                   variants={rsvpChildVariants}
                 >
@@ -1452,19 +1452,19 @@ export default function Invitation({ name, onLogout }) {
 
                 {/* Textos informativos de la tarjeta */}
                 <div className="rsvp-content">
-                  <motion.p 
+                  <motion.p
                     className="rsvp-main-phrase"
                     variants={rsvpChildVariants}
                   >
                     ¡Será un día muy especial para nuestra familia!
                   </motion.p>
-                  <motion.h3 
+                  <motion.h3
                     className="rsvp-question"
                     variants={rsvpChildVariants}
                   >
                     ¿Nos Acompañarás?
                   </motion.h3>
-                  <motion.p 
+                  <motion.p
                     className="rsvp-subtext"
                     variants={rsvpChildVariants}
                   >
@@ -1473,7 +1473,7 @@ export default function Invitation({ name, onLogout }) {
 
                   {/* Estado actual de confirmación */}
                   {userRSVP !== null && (
-                    <motion.div 
+                    <motion.div
                       className="rsvp-status-badge"
                       variants={rsvpChildVariants}
                     >
@@ -1519,8 +1519,8 @@ export default function Invitation({ name, onLogout }) {
 
             {isAdmin && (
               <div className="admin-section-container">
-                <button 
-                  className="admin-list-btn" 
+                <button
+                  className="admin-list-btn"
                   onClick={loadGuestList}
                   disabled={loadingAdminList}
                 >
@@ -1620,7 +1620,7 @@ export default function Invitation({ name, onLogout }) {
               onClick={(e) => e.stopPropagation()}
             >
               <h3 className="rsvp-modal-title">¿Contamos contigo?</h3>
-              
+
               <div className="rsvp-modal-actions">
                 <button
                   className="rsvp-modal-btn rsvp-btn-yes"
@@ -1682,7 +1682,7 @@ export default function Invitation({ name, onLogout }) {
               </div>
               <h3 className="thanks-title">¡Gracias por confirmar!</h3>
               <p className="thanks-message">
-                Tu respuesta ha sido guardada. ¡Nos hace muy felices compartir este momento tan especial contigo!
+                .
               </p>
               <div className="thanks-sparkle-decor">✦ ✦ ✦</div>
             </motion.div>
@@ -1701,7 +1701,7 @@ export default function Invitation({ name, onLogout }) {
             transition={{ type: "spring", damping: 25, stiffness: 220 }}
           >
             <div className="admin-list-header">
-              <button 
+              <button
                 className="admin-list-back-btn"
                 onClick={() => {
                   setShowAdminList(false);
@@ -1716,8 +1716,8 @@ export default function Invitation({ name, onLogout }) {
             <div className="admin-list-content">
               {/* Buscador */}
               <div className="admin-search-container">
-                <input 
-                  type="text" 
+                <input
+                  type="text"
                   className="admin-search-input"
                   placeholder="Buscar por nombre..."
                   value={adminSearch}
@@ -1779,7 +1779,7 @@ export default function Invitation({ name, onLogout }) {
                           ) : (
                             <span className="tag-none">Sin voto</span>
                           )}
-                          
+
                           {guest.confirmed_attendance === true ? (
                             <span className="badge-yes">✓ Asistirá</span>
                           ) : guest.confirmed_attendance === false ? (
@@ -1789,7 +1789,7 @@ export default function Invitation({ name, onLogout }) {
                           )}
                         </div>
                       </div>
-                  ))}
+                    ))}
                   {guestListData.filter(g => (g.name || '').toLowerCase().includes(adminSearch.toLowerCase())).length === 0 && (
                     <p className="no-guests-msg">No se encontraron resultados para "{adminSearch}".</p>
                   )}
