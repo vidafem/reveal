@@ -148,7 +148,7 @@ export default function Invitation({ name }) {
       const { data, error } = await supabase
         .from('invitations')
         .select('prediction');
-      
+
       if (error) {
         console.warn('No se pudieron cargar votos de Supabase, usando locales:', error.message);
         return;
@@ -754,6 +754,14 @@ export default function Invitation({ name }) {
                   <span className="gender-word">Gender</span>
                   <span className="reveal-word">Reveal</span>
                 </motion.h2>
+                <motion.p
+                  className="gender-reveal-subtitle"
+                  style={{ y: titleY, opacity: titleOpacity }}
+                >
+                  <span className="subtitle-ornament">✦</span>
+                  <span className="subtitle-names">Cumbe · Hidalgo</span>
+                  <span className="subtitle-ornament">✦</span>
+                </motion.p>
               </motion.div>
 
               {/* EL OSITO DE LA MANO (osomano.png) */}
@@ -866,7 +874,7 @@ export default function Invitation({ name }) {
                   y: dateY
                 }}
               >
-                <span className="event-date-day">Sabado</span>
+                <span className="event-date-day">Sábado</span>
                 <span className="event-date-divider">|</span>
                 <span className="event-date-number">15</span>
                 <span className="event-date-divider">|</span>
@@ -955,7 +963,7 @@ export default function Invitation({ name }) {
                       rel="noopener noreferrer"
                       className="details-action-btn"
                     >
-                      <span>📍 Como llegar</span>
+                      <span>📍 Cómo llegar</span>
                     </a>
                     <button
                       className="details-action-btn"
@@ -1009,7 +1017,7 @@ export default function Invitation({ name }) {
                 className="dresscode-text"
                 variants={dresscodeTextVariants}
               >
-                ¡Vístete de blanco, beige o del color que sonsideres que sera para ser parte de este momento especial!
+                ¡Vístete de blanco, beige o del color que consideres que sea para ser parte de este momento especial!
               </motion.p>
             </motion.section>
 
@@ -1180,16 +1188,17 @@ export default function Invitation({ name }) {
         {!isScrolled && !showIntro && (
           <motion.div
             className="fixed-scroll-indicator"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.3 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.5 }}
           >
             <motion.div
-              animate={{ y: [0, 6, 0] }}
+              animate={{ y: [0, 7, 0] }}
               transition={{ repeat: Infinity, duration: 1.6, ease: "easeInOut" }}
               className="fixed-scroll-arrow-container"
             >
+              <span className="fixed-scroll-label">Desliza para ver</span>
               <span className="fixed-scroll-arrow">↓</span>
             </motion.div>
           </motion.div>

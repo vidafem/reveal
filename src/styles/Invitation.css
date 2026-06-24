@@ -97,18 +97,21 @@
    ============================================================= */
 .invitation-content {
   width: 100%;
-  min-height: 100vh; /* Alto natural adaptado al contenido */
+  min-height: 100vh;
+  /* Alto natural adaptado al contenido */
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
   z-index: 2;
-  padding-bottom: 4rem; /* Margen inferior para que la tarjeta no quede al ras */
+  padding-bottom: 4rem;
+  /* Margen inferior para que la tarjeta no quede al ras */
 }
 
 /* Portada (Gender Reveal) */
 .hero-section {
-  height: 100vh; /* Restablecido a 100vh para que el contenido de abajo comience completamente oculto */
+  height: 100vh;
+  /* Restablecido a 100vh para que el contenido de abajo comience completamente oculto */
   width: 100%;
   position: relative;
   z-index: 2;
@@ -133,9 +136,36 @@
 
 .reveal-word {
   display: block;
-  font-size: 6.8rem;
+  font-size: 5.8rem;
   margin-top: 1.2rem;
   color: #c5a059;
+}
+
+.gender-reveal-subtitle {
+  margin: 0.8rem 0 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: 'Georgia', serif;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+}
+
+.subtitle-ornament {
+  color: #b28e47;
+  font-size: 0.65rem;
+  opacity: 0.75;
+}
+
+.subtitle-names {
+  font-size: 0.82rem;
+  color: #7b5b42;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-shadow:
+    1px 1px 3px rgba(255, 255, 255, 0.9),
+    0 0 8px rgba(197, 160, 89, 0.25);
 }
 
 /* Contenedores de posicionamiento absoluto robusto para evitar saltos y superposiciones al inicio */
@@ -184,7 +214,8 @@
 /* Frase nueva (Pronto habrá una nueva sonrisa...) */
 .invitation-phrase {
   width: 100%;
-  opacity: 0; /* Invisible al inicio, controlada por scroll */
+  opacity: 0;
+  /* Invisible al inicio, controlada por scroll */
 }
 
 .invitation-phrase h2 {
@@ -205,17 +236,20 @@
 
 /* Sección 2: Próximos detalles */
 .details-section {
-  min-height: 60vh; /* Reducido para evitar exceso de scroll vacío */
+  min-height: 60vh;
+  /* Reducido para evitar exceso de scroll vacío */
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* Alineado arriba para comenzar en 100vh y terminar en 80vh */
+  justify-content: flex-start;
+  /* Alineado arriba para comenzar en 100vh y terminar en 80vh */
   background-color: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(4px);
   border-top: 1px solid rgba(255, 255, 255, 0.2);
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 1vh 1.5rem 1.5rem 1.5rem; /* Reducido bottom padding */
+  padding: 1vh 1.5rem 1.5rem 1.5rem;
+  /* Reducido bottom padding */
   text-align: center;
   position: relative;
   z-index: 10;
@@ -230,32 +264,39 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 120px; /* Espacio para que flote la nube sin molestar */
+  min-height: 120px;
+  /* Espacio para que flote la nube sin molestar */
 }
 
 .details-title-cloud-bg {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); /* Centrado perfecto respecto al contenedor */
-  width: 340px; /* Tamaño idóneo de la nube */
+  transform: translate(-50%, -50%);
+  /* Centrado perfecto respecto al contenedor */
+  width: 340px;
+  /* Tamaño idóneo de la nube */
   height: auto;
-  z-index: 1; /* Detrás del título */
+  z-index: 1;
+  /* Detrás del título */
   pointer-events: none;
-  mix-blend-mode: multiply; /* Fusión perfecta de textura */
+  mix-blend-mode: multiply;
+  /* Fusión perfecta de textura */
 }
 
 .details-title-new {
   font-family: 'GreatVibes', cursive;
   font-size: 3.6rem;
   color: #7b5b42;
-  margin: 0; /* Removemos margen ya que el contenedor maneja el layout */
+  margin: 0;
+  /* Removemos margen ya que el contenedor maneja el layout */
   font-weight: normal;
   line-height: 1.2;
   text-shadow: 2px 2px 5px rgba(123, 91, 66, 0.25),
     -1px -1px 0px rgba(255, 255, 255, 0.8);
   position: relative;
-  z-index: 2; /* Texto sobre la nube */
+  z-index: 2;
+  /* Texto sobre la nube */
 }
 
 /* Contenedor de la fecha (Estilo premium alineado) */
@@ -269,7 +310,8 @@
   color: #8c6e58;
 }
 
-.event-date-day, .event-date-month {
+.event-date-day,
+.event-date-month {
   font-size: 2.2rem;
   font-weight: 500;
   text-transform: uppercase;
@@ -294,24 +336,29 @@
 .event-details-row {
   position: relative;
   width: 90%;
-  max-width: 380px; /* Tamaño de tarjeta super compacto e ideal para móvil */
+  max-width: 380px;
+  /* Tamaño de tarjeta super compacto e ideal para móvil */
   margin: 0 auto;
-  padding: 1.5rem 1rem; /* Padding reducido al no tener recuadro visible */
+  padding: 1.5rem 1rem;
+  /* Padding reducido al no tener recuadro visible */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  overflow: visible; /* Deja que el osito sobresalga ligeramente */
+  overflow: visible;
+  /* Deja que el osito sobresalga ligeramente */
 }
 
 .event-details-info {
   display: flex;
   flex-direction: column;
   gap: 1.8rem;
-  text-align: center; /* Texto centrado perfectamente */
+  text-align: center;
+  /* Texto centrado perfectamente */
   width: 100%;
   position: relative;
-  z-index: 2; /* Texto por encima del oso */
+  z-index: 2;
+  /* Texto por encima del oso */
 }
 
 .info-item {
@@ -335,18 +382,22 @@
   color: #7b5b42;
   font-weight: 600;
   line-height: 1.4;
-  text-shadow: 0px 0px 4px rgba(255, 255, 255, 0.9); /* Sombreado blanco detrás para legibilidad absoluta */
+  text-shadow: 0px 0px 4px rgba(255, 255, 255, 0.9);
+  /* Sombreado blanco detrás para legibilidad absoluta */
 }
 
 /* Columna del osito absoluto */
 .event-details-bear {
   position: absolute;
-  left: -20px; /* Asomándose a la izquierda */
+  left: -20px;
+  /* Asomándose a la izquierda */
   top: 50%;
   transform: translateY(-50%);
-  width: 130px; /* Tamaño no intrusivo */
+  width: 130px;
+  /* Tamaño no intrusivo */
   height: auto;
-  z-index: 1; /* Detrás del texto */
+  z-index: 1;
+  /* Detrás del texto */
   pointer-events: none;
   mix-blend-mode: multiply;
   display: flex;
@@ -365,44 +416,48 @@
     min-height: 90px;
     margin-bottom: 2rem;
   }
-  
+
   .details-title-cloud-bg {
     width: 290px;
   }
-  
+
   .details-title-new {
     font-size: 2.5rem;
     margin: 0;
     padding: 0 10px;
   }
-  
+
   .event-date-container {
     gap: 0.8rem;
     margin-bottom: 2.5rem;
   }
-  
-  .event-date-day, .event-date-month {
+
+  .event-date-day,
+  .event-date-month {
     font-size: 1.4rem;
     letter-spacing: 1px;
   }
-  
+
   .event-date-number {
     font-size: 2.6rem;
   }
-  
+
   .event-date-divider {
     font-size: 1.6rem;
   }
-  
+
   .event-details-row {
-    padding: 1rem 0.5rem; /* Padding móvil mínimo */
+    padding: 1rem 0.5rem;
+    /* Padding móvil mínimo */
     margin: 0 auto;
     width: 90%;
-    max-width: 320px; /* Un poco más angosto para celulares muy pequeños */
+    max-width: 320px;
+    /* Un poco más angosto para celulares muy pequeños */
   }
-  
+
   .event-details-bear {
-    width: 110px; /* Ajuste para móvil */
+    width: 110px;
+    /* Ajuste para móvil */
     left: -15px;
   }
 }
@@ -424,7 +479,8 @@
   z-index: 8;
   pointer-events: none;
   mix-blend-mode: multiply;
-  opacity: 0; /* Invisible al inicio, controlada por scroll */
+  opacity: 0;
+  /* Invisible al inicio, controlada por scroll */
 }
 
 
@@ -434,33 +490,47 @@
    ============================================================== */
 .fixed-scroll-indicator {
   position: fixed;
-  bottom: 25px;
-  right: 25px; /* En la parte inferior derecha */
-  width: 42px;
-  height: 42px;
-  border-radius: 50%;
-  background-color: rgba(253, 251, 247, 0.85);
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  height: auto;
+  border-radius: 50px;
+  background-color: rgba(253, 251, 247, 0.88);
   border: 1px solid rgba(197, 160, 89, 0.45);
-  box-shadow: 0 4px 16px rgba(123, 91, 66, 0.12);
+  box-shadow: 0 4px 20px rgba(123, 91, 66, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0.5rem 1.2rem;
   z-index: 9999;
   pointer-events: none;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .fixed-scroll-arrow-container {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 2px;
+}
+
+.fixed-scroll-label {
+  font-family: 'Georgia', serif;
+  font-size: 0.72rem;
+  color: #8c6e58;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .fixed-scroll-arrow {
   color: #c5a059;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   font-weight: bold;
+  line-height: 1;
 }
 
 /* Botones de Acción (Cómo Llegar / Agregar Calendario) */
@@ -600,8 +670,8 @@
   padding: 0 1.5rem;
   z-index: 10;
   position: relative;
-  text-shadow: 1px 1px 3px rgba(123, 91, 66, 0.18), 
-               0 0 5px rgba(255, 255, 255, 0.8);
+  text-shadow: 1px 1px 3px rgba(123, 91, 66, 0.18),
+    0 0 5px rgba(255, 255, 255, 0.8);
 }
 
 .dresscode-header {
@@ -614,7 +684,8 @@
 }
 
 .dresscode-icon {
-  width: 120px; /* Luna mucho más grande */
+  width: 120px;
+  /* Luna mucho más grande */
   height: auto;
   mix-blend-mode: multiply;
   flex-shrink: 0;
@@ -629,7 +700,8 @@
   letter-spacing: 1.5px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start; /* Alineado a la izquierda para acomodarse al lado de la luna */
+  align-items: flex-start;
+  /* Alineado a la izquierda para acomodarse al lado de la luna */
   text-align: left;
   line-height: 1.2;
 }
@@ -657,8 +729,8 @@
   box-sizing: border-box;
   z-index: 10;
   position: relative;
-  text-shadow: 1px 1px 3px rgba(123, 91, 66, 0.15), 
-               0 0 5px rgba(255, 255, 255, 0.8);
+  text-shadow: 1px 1px 3px rgba(123, 91, 66, 0.15),
+    0 0 5px rgba(255, 255, 255, 0.8);
 }
 
 .gift-card {
@@ -680,7 +752,8 @@
   transform: translateX(-50%);
   width: 60px;
   height: 30px;
-  background-color: #fdfbf7; /* Se funde con el fondo del body */
+  background-color: #fdfbf7;
+  /* Se funde con el fondo del body */
   border-bottom: 1px solid rgba(197, 160, 89, 0.35);
   border-left: 1px solid rgba(197, 160, 89, 0.35);
   border-right: 1px solid rgba(197, 160, 89, 0.35);
@@ -696,13 +769,29 @@
   height: auto;
   pointer-events: none;
   mix-blend-mode: multiply;
-  z-index: 1; /* Detrás del texto pero dentro de la tarjeta */
+  z-index: 1;
+  /* Detrás del texto pero dentro de la tarjeta */
 }
 
-.sparkle-1 { top: 12%; left: 8%; }
-.sparkle-2 { top: 22%; right: 10%; }
-.sparkle-3 { bottom: 25%; left: 12%; }
-.sparkle-4 { bottom: 18%; right: 15%; }
+.sparkle-1 {
+  top: 12%;
+  left: 8%;
+}
+
+.sparkle-2 {
+  top: 22%;
+  right: 10%;
+}
+
+.sparkle-3 {
+  bottom: 25%;
+  left: 12%;
+}
+
+.sparkle-4 {
+  bottom: 18%;
+  right: 15%;
+}
 
 .gift-card-header {
   display: flex;
@@ -800,20 +889,20 @@
   .dresscode-section {
     margin-top: -8.5rem;
   }
-  
+
   .dresscode-title {
     font-size: 1.8rem;
   }
-  
+
   .dresscode-text {
     font-size: 0.95rem;
     max-width: 290px;
   }
-  
+
   .dresscode-icon {
     width: 90px;
   }
-  
+
   .gift-card-container {
     padding-bottom: 5rem;
   }
@@ -841,11 +930,11 @@
   .gift-team-desc {
     font-size: 0.85rem;
   }
-  
+
   .gift-card-icon-left {
     width: 40px;
   }
-  
+
   .gift-card-icon-right {
     width: 35px;
   }
@@ -861,7 +950,8 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 1; /* Detrás del contenido de las secciones */
+  z-index: 1;
+  /* Detrás del contenido de las secciones */
   overflow: hidden;
 }
 
@@ -879,8 +969,8 @@
   padding: 0 1.5rem;
   z-index: 10;
   position: relative;
-  text-shadow: 1px 1px 3px rgba(123, 91, 66, 0.15), 
-               0 0 5px rgba(255, 255, 255, 0.8);
+  text-shadow: 1px 1px 3px rgba(123, 91, 66, 0.15),
+    0 0 5px rgba(255, 255, 255, 0.8);
 }
 
 .prediction-title {
@@ -1031,37 +1121,47 @@
   .prediction-section {
     margin-top: 2.5rem;
   }
+
   .prediction-title {
     font-size: 1.8rem;
   }
+
   .prediction-subtitle {
     font-size: 0.95rem;
     margin-bottom: 1.5rem;
   }
+
   .prediction-bears-container {
     max-width: 250px;
     margin-bottom: 1.5rem;
   }
+
   .prediction-buttons {
     gap: 1rem;
     max-width: 300px;
     margin-bottom: 2rem;
   }
+
   .prediction-btn {
     font-size: 1rem;
     padding: 0.7rem 1.5rem;
   }
+
   .results-title {
     font-size: 2.6rem;
   }
+
   .results-percentages {
     font-size: 0.95rem;
   }
+
   .results-bar-container {
     height: 14px;
     border-radius: 7px;
   }
-  .results-bar-boy, .results-bar-girl {
+
+  .results-bar-boy,
+  .results-bar-girl {
     border-radius: 7px;
   }
 }
