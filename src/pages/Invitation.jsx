@@ -1340,14 +1340,14 @@ export default function Invitation({ name, onLogout }) {
                 <div className="gift-columns">
                   <div className="gift-column">
                     <span className="gift-team-title">Team niño</span>
-                    <span className="gift-team-desc">Trae Pañales de preferencia: marca marca</span>
+                    <span className="gift-team-desc">Pañales de preferencia: marca marca</span>
                   </div>
 
                   <div className="gift-divider-star">✦</div>
 
                   <div className="gift-column">
                     <span className="gift-team-title">Team niña</span>
-                    <span className="gift-team-desc">Trae toallitas húmedas de preferencia: marca marca</span>
+                    <span className="gift-team-desc">toallitas húmedas de preferencia: marca marca</span>
 
                   </div>
                 </div>
