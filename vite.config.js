@@ -24,7 +24,8 @@ export default defineConfig({
         ]
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,mp3,ttf}']
+        globPatterns: ['**/*.{js,css,html,ico,png,svg,jpg,jpeg,mp3,ttf}'],
+        maximumFileSizeToCacheInBytes: 100000000 // 100MB límite para soportar la canción
       }
     })
   ],
