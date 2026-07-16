@@ -1255,7 +1255,7 @@ export default function Invitation({ name, onLogout }) {
                 className="dresscode-text"
                 variants={dresscodeTextVariants}
               >
-                ¡Vístete de blanco, beige o del color que consideres que sea para ser parte de este momento especial!
+                ¡Vístete de blanco o beige para ser parte de este momento especial!
               </motion.p>
             </motion.section>
 
@@ -1340,17 +1340,19 @@ export default function Invitation({ name, onLogout }) {
                 <div className="gift-columns">
                   <div className="gift-column">
                     <span className="gift-team-title">Team niño</span>
-                    <span className="gift-team-desc">Trae Pañales de preferencia: marca marca</span>
+                    <span className="gift-team-desc">Pañales de preferencia: Nappis/Panolini</span>
                   </div>
 
                   <div className="gift-divider-star">✦</div>
 
                   <div className="gift-column">
                     <span className="gift-team-title">Team niña</span>
-                    <span className="gift-team-desc">Trae toallitas húmedas de preferencia: marca marca</span>
+                    <span className="gift-team-desc">toallitas húmedas de preferencia: Crema Derm</span>
 
                   </div>
                 </div>
+                <p className="gift-card-subtext">-</p>
+                <p className="gift-card-subtext">Pero si estas indecis@ podrias traer ropita</p>
               </div>
             </motion.div>
 

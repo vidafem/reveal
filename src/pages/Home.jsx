@@ -1,14 +1,49 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../supabaseClient';
 import '../styles/Home.css';
 
-const BEAR_SRC = '/images/bear.png'; 
+const BACKGROUND_IMAGES = [
+  '/images/im1.jpg',
+  '/images/im2.jpg',
+  '/images/im3.jpg'
+];
 
 export default function Home({ onEnter }) {
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
+  const [currentBgIndex, setCurrentBgIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentBgIndex((prev) => (prev + 1) % BACKGROUND_IMAGES.length);
+    }, 4000); // Cambia de imagen cada 4 segundos (dando tiempo para mostrarla y para la transición de 2s)
+    return () => clearInterval(interval);
+  }, []);
+
+  // Generación procedimental de 35 destellos
+  const sparkles = React.useMemo(() => {
+    const list = [];
+    const colors = [
+      '#ebd5a3', // Amarillo crema / Oro claro
+      '#ffffff', // Blanco puro
+      '#fdfbf7', // Blanco crema
+      '#c5a059', // Dorado
+      '#fbcfe8', // Rosa claro
+      '#93c5fd'  // Azul claro
+    ];
+    for (let i = 0; i < 35; i++) {
+      const top = `${Math.random() * 100}%`;
+      const left = `${Math.random() * 100}%`;
+      const color = colors[Math.floor(Math.random() * colors.length)];
+      const size = `${8 + Math.floor(Math.random() * 15)}px`; // 8px a 23px
+      const duration = 3.0 + Math.random() * 4.0; // Animación más lenta (3s a 7s) para suavidad y armonía
+      const delay = Math.random() * 2.5; // 0s a 2.5s
+      list.push({ top, left, color, size, duration, delay });
+    }
+    return list;
+  }, []);
 
   // Función para poner en mayúscula la primera letra de cada palabra
   const formatName = (str) => {
@@ -27,6 +62,14 @@ export default function Home({ onEnter }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name.trim()) return;
+
+    // Reproducir sonido al hacer clic
+    try {
+      const audio = new Audio('/images/sobre.mp3');
+      audio.play().catch(err => console.error("Error al reproducir audio:", err));
+    } catch (err) {
+      console.error(err);
+    }
 
     // Aseguramos que al guardar también vaya formateado
     const formattedName = formatName(name.trim());
@@ -53,71 +96,63 @@ export default function Home({ onEnter }) {
   return (
     <div className="home-container">
 
-      {/* NUBE IZQUIERDA */}
-      <motion.div
-        className="clouds-layer cloud-left"
-        initial={{ x: '-100vw', opacity: 0 }}
-        animate={isExiting ? { x: '-100vw', opacity: 0 } : { x: '-10vw', opacity: 0.9 }}
-        transition={{ duration: isExiting ? 1.0 : 1.5, ease: "easeInOut" }}
-      >
-        <motion.img
-          src="/images/clouds.png"
-          alt="Nube izquierda"
-          style={{ width: '100%', mixBlendMode: 'multiply' }}
-          animate={{
-            y: [0, -8, 8, 0],
-            rotate: [0, 1.5, -1.5, 0]
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-      </motion.div>
+      {/* BACKGROUND SLIDESHOW */}
+      <div className="home-bg-slideshow">
+        <AnimatePresence>
+          <motion.img
+            key={currentBgIndex}
+            src={BACKGROUND_IMAGES[currentBgIndex]}
+            alt="Background slide"
+            className="home-bg-slide"
+            initial={{ opacity: 0 }}
+            animate={isExiting ? { opacity: 0 } : { opacity: 0.7 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 2.0, ease: "easeInOut" }}
+          />
+        </AnimatePresence>
+        <div className="home-bg-texture"></div>
+        <div className="home-bg-overlay"></div>
+      </div>
 
-      {/* NUBE DERECHA */}
-      <motion.div
-        className="clouds-layer cloud-right"
-        initial={{ x: '100vw', opacity: 0 }}
-        animate={isExiting ? { x: '100vw', opacity: 0 } : { x: '10vw', opacity: 0.9 }}
-        transition={{ duration: isExiting ? 1.0 : 1.5, ease: "easeInOut", delay: isExiting ? 0 : 0.2 }}
-      >
-        <motion.img
-          src="/images/clouds.png"
-          alt="Nube derecha"
-          style={{ width: '100%', mixBlendMode: 'multiply', transform: 'scaleX(-1)' }}
-          animate={{
-            y: [0, 8, -8, 0],
-            rotate: [0, -1.5, 1.5, 0]
-          }}
-          transition={{
-            duration: 7,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-      </motion.div>
+      {/* DESTELLOS DE FONDO (ESTRELLITAS) */}
+      <div className="home-sparkles-container">
+        {sparkles.map((sp, idx) => (
+          <motion.span
+            key={idx}
+            style={{
+              position: 'absolute',
+              top: sp.top,
+              left: sp.left,
+              color: sp.color,
+              fontSize: sp.size,
+              textShadow: `0 0 ${parseInt(sp.size) / 2}px ${sp.color}, 0 0 ${parseInt(sp.size)}px ${sp.color}`,
+              pointerEvents: 'none',
+              zIndex: 4,
+              lineHeight: 1
+            }}
+            animate={isExiting ? { opacity: 0 } : {
+              opacity: [0.1, 0.85, 0.1], // Opacidad aumentada según requerimiento
+              scale: [0.8, 1.2, 0.8]
+            }}
+            transition={{
+              repeat: Infinity,
+              duration: sp.duration,
+              delay: sp.delay,
+              ease: "easeInOut"
+            }}
+          >
+            ✦
+          </motion.span>
+        ))}
+      </div>
 
-      {/* OSITO */}
-      <motion.div
-        className="bear-element"
-        initial={{ y: -100, opacity: 0 }}
-        animate={isExiting ? { y: -300, opacity: 0 } : { y: 0, opacity: 1 }}
-        transition={{ duration: isExiting ? 1.0 : 1.2, ease: "easeInOut" }}
-      >
-        <img
-          src={BEAR_SRC}
-          alt="Osito"
-          style={{ width: '100%', mixBlendMode: 'multiply' }}
-        />
-      </motion.div>
+
 
       {/* CONTENEDOR DEL SOBRE COMPLETO */}
       <motion.div
         className="envelope-wrapper"
-        initial={{ scale: 0.5, opacity: 0, y: 50 }}
-        animate={isExiting ? { scale: 0.3, opacity: 0, y: 150 } : { scale: 1, opacity: 1, y: 0 }}
+        initial={{ scale: 0.5, rotate: 10, opacity: 0, y: 50 }}
+        animate={isExiting ? { scale: 0.3, rotate: 10, opacity: 0, y: 150 } : { scale: 1.2, rotate: 10, opacity: 1, y: 0 }}
         transition={{ 
           duration: isExiting ? 0.8 : 0.8, 
           delay: isExiting ? 0 : 1, 
@@ -130,7 +165,7 @@ export default function Home({ onEnter }) {
         <motion.div
           className="envelope-letter"
           initial={{ y: 0 }}
-          animate={isExiting ? { y: 0 } : { y: -70 }}
+          animate={isExiting ? { y: 0 } : { y: -35 }}
           transition={{ duration: isExiting ? 0.6 : 1.2, delay: isExiting ? 0 : 2, ease: "easeInOut" }}
         >
           <h2>Acompáñanos a descubrir esta gran <br /> sorpresa</h2>

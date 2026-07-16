@@ -14,6 +14,66 @@
 }
 
 /* ==============================================================
+   BACKGROUND SLIDESHOW
+   ============================================================== */
+.home-bg-slideshow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.home-bg-slide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.70; /* 70% opacity */
+  z-index: 1;
+}
+
+.home-bg-texture {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/images/f_1.jpg');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.20; /* 20% opacity as requested */
+  z-index: 2;
+  pointer-events: none;
+}
+
+.home-bg-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.25); /* Subtle dark overlay to give depth and make the envelope pop */
+  z-index: 3;
+  pointer-events: none;
+}
+
+.home-sparkles-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 4;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* ==============================================================
    NUBES DE ACUARELA
    ============================================================== */
 .clouds-layer {
@@ -54,9 +114,9 @@
    ============================================================== */
 .envelope-wrapper {
   position: relative;
-  width: 320px;
-  height: 200px;
-  margin-top: 15vh;
+  width: 160px;
+  height: 100px;
+  margin-top: 32vh; /* Aumentado para bajarlo más */
   z-index: 10;
 }
 
@@ -67,33 +127,33 @@
   width: 100%;
   height: 100%;
   background-color: #c9a78e;
-  border-radius: 8px;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+  border-radius: 4px;
+  box-shadow: 0 7.5px 15px rgba(0,0,0,0.2);
   z-index: 1;
 }
 
 .envelope-letter {
   position: absolute;
-  bottom: 10px;
+  bottom: 5px;
   left: 5%;
   width: 90%;
-  height: 190px;
+  height: 95px;
   background-color: #fdfaf3;
   border: 1px solid #e8dec9;
-  border-radius: 5px;
+  border-radius: 3px;
   z-index: 2;
-  padding: 1.5rem;
+  padding: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  box-shadow: 0 0 7.5px rgba(0,0,0,0.1);
 }
 
 .envelope-letter h2 {
   color: #7b5b42;
   font-family: 'GreatVibes', cursive;
-  font-size: 2.2rem;
+  font-size: 1.1rem;
   font-weight: normal;
   line-height: 1.2;
   margin: 0;
@@ -105,12 +165,12 @@
   left: 0;
   width: 0;
   height: 0;
-  border-top: 100px solid transparent;
-  border-bottom: 100px solid transparent;
-  border-left: 160px solid #dfc3b0;
+  border-top: 50px solid transparent;
+  border-bottom: 50px solid transparent;
+  border-left: 80px solid #dfc3b0;
   z-index: 3;
-  border-bottom-left-radius: 8px;
-  border-top-left-radius: 8px;
+  border-bottom-left-radius: 4px;
+  border-top-left-radius: 4px;
 }
 
 .envelope-flap-right {
@@ -119,12 +179,12 @@
   right: 0;
   width: 0;
   height: 0;
-  border-top: 100px solid transparent;
-  border-bottom: 100px solid transparent;
-  border-right: 160px solid #dfc3b0;
+  border-top: 50px solid transparent;
+  border-bottom: 50px solid transparent;
+  border-right: 80px solid #dfc3b0;
   z-index: 3;
-  border-bottom-right-radius: 8px;
-  border-top-right-radius: 8px;
+  border-bottom-right-radius: 4px;
+  border-top-right-radius: 4px;
 }
 
 .envelope-flap-bottom {
@@ -133,12 +193,12 @@
   left: 0;
   width: 0;
   height: 0;
-  border-left: 160px solid transparent;
-  border-right: 160px solid transparent;
-  border-bottom: 120px solid #d4b59f;
+  border-left: 80px solid transparent;
+  border-right: 80px solid transparent;
+  border-bottom: 60px solid #d4b59f;
   z-index: 4;
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
 }
 
 /* ==============================================================
