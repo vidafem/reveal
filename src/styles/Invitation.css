@@ -10,7 +10,6 @@
 .invitation-container {
   width: 100vw;
   height: 100vh;
-  height: 100dvh; /* Altura dinámica para celulares */
   position: relative;
   color: #7b5b42;
   overflow-y: auto;

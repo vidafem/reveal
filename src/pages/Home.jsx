@@ -63,9 +63,10 @@ export default function Home({ onEnter }) {
     e.preventDefault();
     if (!name.trim()) return;
 
-    // Reproducir sonido al hacer clic
+    // Reproducir sonido al hacer clic al 25% de volumen
     try {
       const audio = new Audio('/images/sobre.mp3');
+      audio.volume = 0.25;
       audio.play().catch(err => console.error("Error al reproducir audio:", err));
     } catch (err) {
       console.error(err);

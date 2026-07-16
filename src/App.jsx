@@ -15,8 +15,8 @@ function App() {
     const audio = audioRef.current;
     if (!audio) return;
 
-    // Configurar volumen al 50%
-    audio.volume = 0.5;
+    // Configurar volumen al 20%
+    audio.volume = 0.2;
 
     // Manejador para iniciar el audio en la primera interacción
     const handleUserInteraction = () => {
