@@ -1347,7 +1347,7 @@ export default function Invitation({ name, onLogout }) {
 
                   <div className="gift-column">
                     <span className="gift-team-title">Team niña</span>
-                    <span className="gift-team-desc">toallitas húmedas de preferencia: Crema Derm</span>
+                    <span className="gift-team-desc">Toallitas húmedas de preferencia: Crema Derm</span>
 
                   </div>
                 </div>
