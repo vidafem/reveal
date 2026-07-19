@@ -1352,7 +1352,7 @@ export default function Invitation({ name, onLogout }) {
                   </div>
                 </div>
                 <p className="gift-card-subtext">-</p>
-                <p className="gift-card-subtext">Pero si estas indecis@ podrias traer ropita</p>
+                <p className="gift-card-subtext">Pero si estas indecis@ podrias traer ropita unisex</p>
               </div>
             </motion.div>
 
